@@ -292,7 +292,13 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ success: false, message: 'Something went wrong!' });
 });
+app.get('/', (req, res) => {
+  res.json({ message: 'Masters Auto backend is running' });
+});
 
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ ok: true });
+});
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Admin credentials: username: admin, password: masters2024`);
