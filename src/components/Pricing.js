@@ -5,10 +5,41 @@ import { Phone } from 'lucide-react';
 const Pricing = () => {
   const [activeTab, setActiveTab] = useState('basic');
 
+  const handleBooking = async (price, vehicle) => {
+    try {
+      const res = await fetch('http://localhost:5001/api/payments/create-booking-checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          bookingId: `bk_${Date.now()}`,
+          customerName: 'Website Customer',
+          customerEmail: 'booking@mastersauto.com',
+          serviceName: activeTab === 'basic' ? 'Basic Detail' : 'Full Detail',
+          vehicleSize: vehicle,
+          totalPrice: price,
+          depositAmount: Math.max(50, Math.round(price * 0.3)),
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert(data.error || 'Error starting payment');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Payment failed');
+    }
+  };
+
   const basicPricing = [
     {
       size: 'Extra Small',
-      price: '$159',
+      price: 159,
       description: 'Compact cars',
       examples: 'Honda Civic, Toyota Corolla',
       included: [
@@ -17,12 +48,12 @@ const Pricing = () => {
         'Wax body',
         'Clean interior surfaces',
         'Clean windows',
-        'Vacuum seats and carpets'
-      ]
+        'Vacuum seats and carpets',
+      ],
     },
     {
       size: 'Small',
-      price: '$195',
+      price: 195,
       description: 'Sedans',
       examples: 'Toyota Camry, Nissan Altima',
       included: [
@@ -31,12 +62,12 @@ const Pricing = () => {
         'Wax body',
         'Clean interior surfaces',
         'Clean windows',
-        'Vacuum seats and carpets'
-      ]
+        'Vacuum seats and carpets',
+      ],
     },
     {
       size: 'Medium',
-      price: '$249',
+      price: 249,
       description: 'Crossovers',
       examples: 'Honda CR-V, Toyota RAV4',
       included: [
@@ -45,12 +76,12 @@ const Pricing = () => {
         'Wax body',
         'Clean interior surfaces',
         'Clean windows',
-        'Vacuum seats and carpets'
-      ]
+        'Vacuum seats and carpets',
+      ],
     },
     {
       size: 'Large',
-      price: '$339',
+      price: 339,
       description: 'Trucks / Mid SUVs',
       examples: 'Ford F-150, Chevy Silverado',
       included: [
@@ -59,12 +90,12 @@ const Pricing = () => {
         'Wax body',
         'Clean interior surfaces',
         'Clean windows',
-        'Vacuum seats and carpets'
-      ]
+        'Vacuum seats and carpets',
+      ],
     },
     {
       size: 'Extra Large',
-      price: '$429',
+      price: 429,
       description: 'Full-size SUVs',
       examples: 'Chevy Tahoe, Suburban, Ford Expedition',
       included: [
@@ -73,21 +104,73 @@ const Pricing = () => {
         'Wax body',
         'Clean interior surfaces',
         'Clean windows',
-        'Vacuum seats and carpets'
-      ]
-    }
+        'Vacuum seats and carpets',
+      ],
+    },
   ];
 
-  const fullPricing = basicPricing.map(item => ({
-    ...item,
-    price: item.price.replace('$', '$3').replace('159', '359').replace('195', '395').replace('249', '449').replace('339', '539').replace('429', '629'),
-    included: [
-      'Hand wash including jambs',
-      'Clay bar treatment',
-      'Polish to reduce minor abrasions and dullness',
-      'Sealant protection (ceramic coating available)'
-    ]
-  }));
+  const fullPricing = [
+    {
+      size: 'Extra Small',
+      price: 359,
+      description: 'Compact cars',
+      examples: 'Honda Civic, Toyota Corolla',
+      included: [
+        'Hand wash including jambs',
+        'Clay bar treatment',
+        'Polish to reduce minor abrasions and dullness',
+        'Sealant protection (ceramic coating available)',
+      ],
+    },
+    {
+      size: 'Small',
+      price: 395,
+      description: 'Sedans',
+      examples: 'Toyota Camry, Nissan Altima',
+      included: [
+        'Hand wash including jambs',
+        'Clay bar treatment',
+        'Polish to reduce minor abrasions and dullness',
+        'Sealant protection (ceramic coating available)',
+      ],
+    },
+    {
+      size: 'Medium',
+      price: 449,
+      description: 'Crossovers',
+      examples: 'Honda CR-V, Toyota RAV4',
+      included: [
+        'Hand wash including jambs',
+        'Clay bar treatment',
+        'Polish to reduce minor abrasions and dullness',
+        'Sealant protection (ceramic coating available)',
+      ],
+    },
+    {
+      size: 'Large',
+      price: 539,
+      description: 'Trucks / Mid SUVs',
+      examples: 'Ford F-150, Chevy Silverado',
+      included: [
+        'Hand wash including jambs',
+        'Clay bar treatment',
+        'Polish to reduce minor abrasions and dullness',
+        'Sealant protection (ceramic coating available)',
+      ],
+    },
+    {
+      size: 'Extra Large',
+      price: 629,
+      description: 'Full-size SUVs',
+      examples: 'Chevy Tahoe, Suburban, Ford Expedition',
+      included: [
+        'Hand wash including jambs',
+        'Clay bar treatment',
+        'Polish to reduce minor abrasions and dullness',
+        'Sealant protection (ceramic coating available)',
+      ],
+    },
+  ];
 
   const currentPricing = activeTab === 'basic' ? basicPricing : fullPricing;
 
@@ -109,7 +192,6 @@ const Pricing = () => {
           </p>
         </motion.div>
 
-        {/* Pricing Tabs */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -140,11 +222,10 @@ const Pricing = () => {
           </div>
         </motion.div>
 
-        {/* Pricing Cards */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           {currentPricing.map((tier, index) => (
             <motion.div
-              key={tier.size}
+              key={`${activeTab}-${tier.size}`}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -154,10 +235,10 @@ const Pricing = () => {
               <div className="text-center mb-6">
                 <div className="text-red-400 font-bold text-sm mb-2">{tier.description}</div>
                 <h3 className="text-xl font-bold mb-2">{tier.size}</h3>
-                <div className="text-3xl font-black text-red-500 mb-2">{tier.price}</div>
+                <div className="text-3xl font-black text-red-500 mb-2">${tier.price}</div>
                 <div className="text-sm text-gray-500">{tier.examples}</div>
               </div>
-              
+
               <div className="space-y-3 mb-6">
                 {tier.included.map((feature, featureIndex) => (
                   <div key={featureIndex} className="flex items-start gap-2">
@@ -166,19 +247,19 @@ const Pricing = () => {
                   </div>
                 ))}
               </div>
-              
-              <a
-                href="tel:5303212936"
+
+              <button
+                type="button"
+                onClick={() => handleBooking(tier.price, tier.size)}
                 className="btn-primary w-full justify-center text-sm"
               >
                 <Phone size={16} />
                 Book Now
-              </a>
+              </button>
             </motion.div>
           ))}
         </div>
 
-        {/* Service Add-ons */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -208,7 +289,6 @@ const Pricing = () => {
           </p>
         </motion.div>
 
-        {/* Pricing Note */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -220,7 +300,6 @@ const Pricing = () => {
           </p>
         </motion.div>
 
-        {/* Package Comparison */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -233,7 +312,7 @@ const Pricing = () => {
               <div>
                 <h4 className="text-lg font-bold text-red-400 mb-3">Basic Detail</h4>
                 <p className="text-gray-300 mb-4">
-                  Perfect for regular maintenance between deep cleans. Includes exterior wash, 
+                  Perfect for regular maintenance between deep cleans. Includes exterior wash,
                   interior cleaning, and protective wax application.
                 </p>
                 <ul className="space-y-2 text-sm text-gray-400">
@@ -246,7 +325,7 @@ const Pricing = () => {
               <div>
                 <h4 className="text-lg font-bold text-red-400 mb-3">Full Detail</h4>
                 <p className="text-gray-300 mb-4">
-                  Comprehensive restoration with paint correction, clay bar treatment, and 
+                  Comprehensive restoration with paint correction, clay bar treatment, and
                   long-lasting sealant protection. Ceramic coating upgrade available.
                 </p>
                 <ul className="space-y-2 text-sm text-gray-400">

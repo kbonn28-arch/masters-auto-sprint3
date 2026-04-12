@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
+import { useForm, ValidationError } from '@formspree/react';
+import { Phone, MapPin, Clock, Send } from 'lucide-react';
 
 const QuoteForm = () => {
   const [formData, setFormData] = useState({
@@ -13,43 +14,13 @@ const QuoteForm = () => {
     message: ''
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState('');
+  const [state, handleSubmit] = useForm('meepbqgd');
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulate form submission
-    try {
-      // In production, this would send to your backend
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setSubmitStatus('success');
-      setFormData({
-        name: '',
-        phone: '',
-        email: '',
-        vehicleSize: '',
-        serviceType: '',
-        preferredDate: '',
-        message: ''
-      });
-    } catch (error) {
-      setSubmitStatus('error');
-    }
-    
-    setIsSubmitting(false);
-    
-    // Reset status after 5 seconds
-    setTimeout(() => setSubmitStatus(''), 5000);
   };
 
   const contactInfo = [
@@ -92,7 +63,6 @@ const QuoteForm = () => {
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          {/* Contact Information */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -101,7 +71,7 @@ const QuoteForm = () => {
           >
             <div className="card">
               <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
-              
+
               <div className="space-y-4">
                 {contactInfo.map((info, index) => (
                   <div key={index} className="flex items-start gap-4">
@@ -151,7 +121,6 @@ const QuoteForm = () => {
             </div>
           </motion.div>
 
-          {/* Quote Form */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -159,8 +128,8 @@ const QuoteForm = () => {
           >
             <div className="card">
               <h3 className="text-2xl font-bold mb-6">Service Request Form</h3>
-              
-              {submitStatus === 'success' && (
+
+              {state.succeeded && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -170,7 +139,7 @@ const QuoteForm = () => {
                 </motion.div>
               )}
 
-              {submitStatus === 'error' && (
+              {state.errors && state.errors.length > 0 && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -183,10 +152,11 @@ const QuoteForm = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">
+                    <label htmlFor="name" className="block text-sm font-medium mb-2">
                       Full Name <span className="text-red-400">*</span>
                     </label>
                     <input
+                      id="name"
                       type="text"
                       name="name"
                       value={formData.name}
@@ -195,12 +165,15 @@ const QuoteForm = () => {
                       className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:border-red-500 focus:outline-none transition-colors"
                       placeholder="Your name"
                     />
+                    <ValidationError prefix="Name" field="name" errors={state.errors} />
                   </div>
+
                   <div>
-                    <label className="block text-sm font-medium mb-2">
+                    <label htmlFor="phone" className="block text-sm font-medium mb-2">
                       Phone Number <span className="text-red-400">*</span>
                     </label>
                     <input
+                      id="phone"
                       type="tel"
                       name="phone"
                       value={formData.phone}
@@ -209,15 +182,17 @@ const QuoteForm = () => {
                       className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:border-red-500 focus:outline-none transition-colors"
                       placeholder="(530) 555-5555"
                     />
+                    <ValidationError prefix="Phone" field="phone" errors={state.errors} />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">
+                    <label htmlFor="email" className="block text-sm font-medium mb-2">
                       Email Address <span className="text-red-400">*</span>
                     </label>
                     <input
+                      id="email"
                       type="email"
                       name="email"
                       value={formData.email}
@@ -226,12 +201,15 @@ const QuoteForm = () => {
                       className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:border-red-500 focus:outline-none transition-colors"
                       placeholder="you@example.com"
                     />
+                    <ValidationError prefix="Email" field="email" errors={state.errors} />
                   </div>
+
                   <div>
-                    <label className="block text-sm font-medium mb-2">
+                    <label htmlFor="vehicleSize" className="block text-sm font-medium mb-2">
                       Vehicle Size <span className="text-red-400">*</span>
                     </label>
                     <select
+                      id="vehicleSize"
                       name="vehicleSize"
                       value={formData.vehicleSize}
                       onChange={handleChange}
@@ -245,15 +223,17 @@ const QuoteForm = () => {
                       <option value="Large">Large</option>
                       <option value="Extra Large">Extra Large</option>
                     </select>
+                    <ValidationError prefix="Vehicle Size" field="vehicleSize" errors={state.errors} />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">
+                    <label htmlFor="serviceType" className="block text-sm font-medium mb-2">
                       Service Type <span className="text-red-400">*</span>
                     </label>
                     <select
+                      id="serviceType"
                       name="serviceType"
                       value={formData.serviceType}
                       onChange={handleChange}
@@ -268,41 +248,48 @@ const QuoteForm = () => {
                       <option value="Spot Cleaning">Spot Cleaning</option>
                       <option value="Deep Shampoo Cleaning">Deep Shampoo Cleaning</option>
                     </select>
+                    <ValidationError prefix="Service Type" field="serviceType" errors={state.errors} />
                   </div>
+
                   <div>
-                    <label className="block text-sm font-medium mb-2">
+                    <label htmlFor="preferredDate" className="block text-sm font-medium mb-2">
                       Preferred Date
                     </label>
                     <input
+                      id="preferredDate"
                       type="date"
                       name="preferredDate"
                       value={formData.preferredDate}
                       onChange={handleChange}
                       className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg text-white focus:border-red-500 focus:outline-none transition-colors"
                     />
+                    <ValidationError prefix="Preferred Date" field="preferredDate" errors={state.errors} />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Vehicle / Service Notes
+                  <label htmlFor="message" className="block text-sm font-medium mb-2">
+                    Vehicle / Service Notes <span className="text-red-400">*</span>
                   </label>
                   <textarea
+                    id="message"
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
                     rows={4}
+                    required
                     className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:border-red-500 focus:outline-none transition-colors resize-none"
                     placeholder="Tell us about your vehicle, stains, paint issues, or anything else."
                   />
+                  <ValidationError prefix="Message" field="message" errors={state.errors} />
                 </div>
 
                 <button
                   type="submit"
-                  disabled={isSubmitting}
-                  className="btn-primary w-full justify-center py-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={state.submitting}
+                  className="btn-primary w-full justify-center py-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
-                  {isSubmitting ? (
+                  {state.submitting ? (
                     'Submitting...'
                   ) : (
                     <>
