@@ -45,10 +45,10 @@ const Hero = () => {
               transition={{ delay: 0.5 }}
               className="flex flex-col sm:flex-row gap-4"
             >
-              <a
-                href="tel:5303212936"
-                className="btn-primary text-lg px-8 py-4 shadow-2xl"
-              >
+             <a
+  href="#pricing"
+  className="btn-primary text-lg px-8 py-4 shadow-2xl"
+>
                 <Phone size={20} />
                 Call Now
               </a>

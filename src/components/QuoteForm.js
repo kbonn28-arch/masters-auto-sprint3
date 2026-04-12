@@ -28,7 +28,7 @@ const QuoteForm = () => {
       icon: Phone,
       label: 'Phone',
       value: '(530) 321-2936',
-      href: 'tel:5303212936'
+      href: '#pricing'
     },
     {
       icon: MapPin,

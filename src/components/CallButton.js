@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 const CallButton = ({ className = '', size = 'default' }) => {
   const phoneNumber = '(530) 321-2936';
-  const telLink = `tel:5303212936`;
+  const telLink = "#";
 
   const handleCallClick = () => {
     // Track call event (for analytics)

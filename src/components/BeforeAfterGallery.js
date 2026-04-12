@@ -193,7 +193,7 @@ const BeforeAfterGallery = () => {
               <a href="#quote" className="btn-primary">
                 Get Your Free Quote
               </a>
-              <a href="tel:5303212936" className="btn-secondary">
+              <a href="#pricing" className="btn-secondary">
                 Call (530) 321-2936
               </a>
             </div>

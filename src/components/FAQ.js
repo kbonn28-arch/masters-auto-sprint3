@@ -97,7 +97,7 @@ const FAQ = () => {
                 pricing, or the detailing process. Don't hesitate to reach out!
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <a href="tel:5303212936" className="btn-primary">
+                <a href="#pricing" className="btn-primary">
                   Call Us
                 </a>
                 <a href="#contact" className="btn-secondary">

@@ -137,7 +137,7 @@ const SizingGuide = () => {
               Give us a call with your vehicle make and model, and we'll help you determine the correct size 
               and provide an accurate quote.
             </p>
-            <a href="tel:5303212936" className="btn-primary">
+            <a href="#pricing" className="btn-primary">
               Call for Help
             </a>
           </div>
