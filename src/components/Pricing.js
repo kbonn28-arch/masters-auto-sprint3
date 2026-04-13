@@ -5,36 +5,13 @@ import { Phone } from 'lucide-react';
 const Pricing = () => {
   const [activeTab, setActiveTab] = useState('basic');
 
-  const handleBooking = async (price, vehicle) => {
-    try {
-      const res = await fetch('http://localhost:5001/api/payments/create-booking-checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          bookingId: `bk_${Date.now()}`,
-          customerName: 'Website Customer',
-          customerEmail: 'booking@mastersauto.com',
-          serviceName: activeTab === 'basic' ? 'Basic Detail' : 'Full Detail',
-          vehicleSize: vehicle,
-          totalPrice: price,
-          depositAmount: Math.max(50, Math.round(price * 0.3)),
-        }),
-      });
-
-      const data = await res.json();
-
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert(data.error || 'Error starting payment');
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Payment failed');
-    }
-  };
+const handleBooking = (price, vehicle) => {
+  const serviceName = activeTab === 'basic' ? 'Basic Detail' : 'Full Detail';
+  alert(
+    `${serviceName} - ${vehicle} selected.\n\nOnline payment will be connected once the backend is deployed.`
+  );
+  window.location.href = '#quote';
+};
 
   const basicPricing = [
     {
