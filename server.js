@@ -14,21 +14,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      const allowedOrigins = [
-        process.env.CLIENT_URL,
-        "https://masters-auto-sprint3-git-main-kbonn28-archs-projects.vercel.app",
-        "https://mastersautodetail.com",
-        "https://www.mastersautodetail.com",
-      ];
-
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: ["GET", "POST", "OPTIONS"],
+    origin: true, // allow ALL origins temporarily
+    credentials: true,
   })
 );
 
