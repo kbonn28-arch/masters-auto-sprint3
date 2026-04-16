@@ -7,9 +7,17 @@ const Stripe = require("stripe");
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  maxNetworkRetries: 0,
+  timeout: 30000,
+});
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+  })
+);
+
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -24,16 +32,14 @@ app.post("/api/payments/create-booking-checkout", async (req, res) => {
   try {
     console.log("Payment route hit");
     console.log("Stripe key exists:", !!process.env.STRIPE_SECRET_KEY);
+    console.log("CLIENT_URL:", process.env.CLIENT_URL);
     console.log("Request body:", req.body);
 
     const {
       bookingId,
-      customerName,
       customerEmail,
       serviceName,
       vehicleSize,
-      addOns,
-      totalPrice,
       depositAmount,
     } = req.body;
 
@@ -54,15 +60,23 @@ app.post("/api/payments/create-booking-checkout", async (req, res) => {
           quantity: 1,
         },
       ],
-     success_url: `${process.env.CLIENT_URL}/success`,
-cancel_url: `${process.env.CLIENT_URL}/cancel`,
+      success_url: `${process.env.CLIENT_URL}/success`,
+      cancel_url: `${process.env.CLIENT_URL}/cancel`,
     });
 
     res.json({ url: session.url });
   } catch (error) {
-    console.error("Stripe checkout error:", error.message);
+    console.error("FULL STRIPE ERROR:");
+    console.error("message:", error.message);
+    console.error("type:", error.type);
+    console.error("code:", error.code);
+    console.error("statusCode:", error.statusCode);
+    console.error("requestId:", error.requestId);
+    console.error("raw:", error.raw);
+    console.error("stack:", error.stack);
+
     res.status(500).json({
-      error: error.message,
+      error: error.message || "Stripe checkout failed",
     });
   }
 });
