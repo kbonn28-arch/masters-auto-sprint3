@@ -33,6 +33,27 @@ app.get("/api/test-stripe", async (req, res) => {
     const balance = await stripe.balance.retrieve();
     res.json({ success: true, balance });
   } catch (err) {
+    console.error("STRIPE TEST ERROR message:", err.message);
+    console.error("STRIPE TEST ERROR type:", err.type);
+    console.error("STRIPE TEST ERROR code:", err.code);
+    console.error("STRIPE TEST ERROR statusCode:", err.statusCode);
+    console.error("STRIPE TEST ERROR requestId:", err.requestId);
+    console.error("STRIPE TEST ERROR raw:", err.raw);
+    console.error("STRIPE TEST ERROR stack:", err.stack);
+
+    res.status(500).json({
+      error: err.message,
+      type: err.type,
+      code: err.code,
+      statusCode: err.statusCode,
+    });
+  }
+});
+app.get("/api/test-stripe", async (req, res) => {
+  try {
+    const balance = await stripe.balance.retrieve();
+    res.json({ success: true, balance });
+  } catch (err) {
     console.error("STRIPE TEST ERROR:", err);
     res.status(500).json({
       error: err.message,
