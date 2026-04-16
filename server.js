@@ -54,8 +54,8 @@ app.post("/api/payments/create-booking-checkout", async (req, res) => {
           quantity: 1,
         },
       ],
-     success_url: `${process.env.FRONTEND_URL}/success`,
-cancel_url: `${process.env.FRONTEND_URL}/cancel`,
+     success_url: `${process.env.CLIENT_URL}/success`,
+cancel_url: `${process.env.CLIENT_URL}/cancel`,
     });
 
     res.json({ url: session.url });

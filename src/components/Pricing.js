@@ -38,6 +38,7 @@ export default function Pricing() {
     petHair: false,
     headlight: false,
   });
+  const [loading, setLoading] = useState(false);
 
   const basePrice = vehiclePrices[vehicle] || 0;
 
@@ -57,7 +58,7 @@ export default function Pricing() {
     }));
   };
 
-  const handleBooking = (e) => {
+  const handleBooking = async (e) => {
     e.preventDefault();
 
     if (!fullName.trim() || !email.trim() || !phone.trim()) {
@@ -68,30 +69,48 @@ export default function Pricing() {
     const chosenAddOns = Object.entries(selectedAddOns)
       .filter(([, selected]) => selected)
       .map(([key]) => {
-        if (key === "engineBay") return "Engine Bay Detail";
-        if (key === "petHair") return "Pet Hair Removal";
-        if (key === "headlight") return "Headlight Restoration";
-        return key;
+        if (key === "engineBay") return { name: "Engine Bay Detail", price: 40 };
+        if (key === "petHair") return { name: "Pet Hair Removal", price: 35 };
+        if (key === "headlight") return { name: "Headlight Restoration", price: 60 };
+        return { name: key, price: 0 };
       });
 
-    const subject = `New Booking Request - ${fullName}`;
-    const body = `
-New booking request from Masters Auto website
+    try {
+      setLoading(true);
 
-Customer Name: ${fullName}
-Customer Email: ${email}
-Customer Phone: ${phone}
-Vehicle: ${vehicleLabel(vehicle)}
+      const res = await fetch(
+        "https://masters-auto-sprint3.onrender.com/api/payments/create-booking-checkout",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            bookingId: `bk_${Date.now()}`,
+            customerName: fullName,
+            customerEmail: email,
+            serviceName: "Detail Booking",
+            vehicleSize: vehicleLabel(vehicle),
+            addOns: chosenAddOns,
+            totalPrice: total,
+            depositAmount: deposit,
+          }),
+        }
+      );
 
-Selected Add-ons: ${chosenAddOns.length ? chosenAddOns.join(", ") : "None"}
+      const data = await res.json();
 
-Estimated Total: $${total}
-Deposit Due Today: $${deposit}
-    `.trim();
-
-    window.location.href = `mailto:booking@mastersauto.com?subject=${encodeURIComponent(
-      subject
-    )}&body=${encodeURIComponent(body)}`;
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert(data.error || "Error starting payment");
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Payment failed");
+      setLoading(false);
+    }
   };
 
   return (
@@ -206,8 +225,8 @@ Deposit Due Today: $${deposit}
             </p>
           </div>
 
-          <button type="submit" style={buttonStyle}>
-            Send Booking Request
+          <button type="submit" style={buttonStyle} disabled={loading}>
+            {loading ? "Redirecting..." : "Book & Pay Deposit"}
           </button>
         </form>
       </div>
@@ -250,4 +269,5 @@ const buttonStyle = {
   backgroundColor: "#ff1d1d",
   color: "#fff",
   cursor: "pointer",
+  opacity: 1,
 };

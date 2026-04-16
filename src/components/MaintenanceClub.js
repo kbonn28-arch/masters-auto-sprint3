@@ -120,7 +120,7 @@ const MaintenanceClub = () => {
     e.preventDefault();
     
     try {
-      const response = await fetch('/api/maintenance-subscription', {
+      const response = await fetch('https://masters-auto-sprint3.onrender.com/api/maintenance-subscription', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
