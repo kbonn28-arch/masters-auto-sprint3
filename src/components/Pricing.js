@@ -1,323 +1,247 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Phone } from 'lucide-react';
+import React, { useMemo, useState } from "react";
 
-const Pricing = () => {
-  const [activeTab, setActiveTab] = useState('basic');
-
-const handleBooking = (price, vehicle) => {
-  const serviceName = activeTab === 'basic' ? 'Basic Detail' : 'Full Detail';
-  alert(
-    `${serviceName} - ${vehicle} selected.\n\nOnline payment will be connected once the backend is deployed.`
-  );
-  window.location.href = '#quote';
+const vehiclePrices = {
+  sedan: 120,
+  suv: 160,
+  truck: 180,
+  xlarge: 220,
 };
 
-  const basicPricing = [
-    {
-      size: 'Extra Small',
-      price: 159,
-      description: 'Compact cars',
-      examples: 'Honda Civic, Toyota Corolla',
-      included: [
-        'Hand wash, wheels, windows and body',
-        'Dress tires and trim',
-        'Wax body',
-        'Clean interior surfaces',
-        'Clean windows',
-        'Vacuum seats and carpets',
-      ],
-    },
-    {
-      size: 'Small',
-      price: 195,
-      description: 'Sedans',
-      examples: 'Toyota Camry, Nissan Altima',
-      included: [
-        'Hand wash, wheels, windows and body',
-        'Dress tires and trim',
-        'Wax body',
-        'Clean interior surfaces',
-        'Clean windows',
-        'Vacuum seats and carpets',
-      ],
-    },
-    {
-      size: 'Medium',
-      price: 249,
-      description: 'Crossovers',
-      examples: 'Honda CR-V, Toyota RAV4',
-      included: [
-        'Hand wash, wheels, windows and body',
-        'Dress tires and trim',
-        'Wax body',
-        'Clean interior surfaces',
-        'Clean windows',
-        'Vacuum seats and carpets',
-      ],
-    },
-    {
-      size: 'Large',
-      price: 339,
-      description: 'Trucks / Mid SUVs',
-      examples: 'Ford F-150, Chevy Silverado',
-      included: [
-        'Hand wash, wheels, windows and body',
-        'Dress tires and trim',
-        'Wax body',
-        'Clean interior surfaces',
-        'Clean windows',
-        'Vacuum seats and carpets',
-      ],
-    },
-    {
-      size: 'Extra Large',
-      price: 429,
-      description: 'Full-size SUVs',
-      examples: 'Chevy Tahoe, Suburban, Ford Expedition',
-      included: [
-        'Hand wash, wheels, windows and body',
-        'Dress tires and trim',
-        'Wax body',
-        'Clean interior surfaces',
-        'Clean windows',
-        'Vacuum seats and carpets',
-      ],
-    },
-  ];
+const addOnPrices = {
+  engineBay: 40,
+  petHair: 35,
+  headlight: 60,
+};
 
-  const fullPricing = [
-    {
-      size: 'Extra Small',
-      price: 359,
-      description: 'Compact cars',
-      examples: 'Honda Civic, Toyota Corolla',
-      included: [
-        'Hand wash including jambs',
-        'Clay bar treatment',
-        'Polish to reduce minor abrasions and dullness',
-        'Sealant protection (ceramic coating available)',
-      ],
-    },
-    {
-      size: 'Small',
-      price: 395,
-      description: 'Sedans',
-      examples: 'Toyota Camry, Nissan Altima',
-      included: [
-        'Hand wash including jambs',
-        'Clay bar treatment',
-        'Polish to reduce minor abrasions and dullness',
-        'Sealant protection (ceramic coating available)',
-      ],
-    },
-    {
-      size: 'Medium',
-      price: 449,
-      description: 'Crossovers',
-      examples: 'Honda CR-V, Toyota RAV4',
-      included: [
-        'Hand wash including jambs',
-        'Clay bar treatment',
-        'Polish to reduce minor abrasions and dullness',
-        'Sealant protection (ceramic coating available)',
-      ],
-    },
-    {
-      size: 'Large',
-      price: 539,
-      description: 'Trucks / Mid SUVs',
-      examples: 'Ford F-150, Chevy Silverado',
-      included: [
-        'Hand wash including jambs',
-        'Clay bar treatment',
-        'Polish to reduce minor abrasions and dullness',
-        'Sealant protection (ceramic coating available)',
-      ],
-    },
-    {
-      size: 'Extra Large',
-      price: 629,
-      description: 'Full-size SUVs',
-      examples: 'Chevy Tahoe, Suburban, Ford Expedition',
-      included: [
-        'Hand wash including jambs',
-        'Clay bar treatment',
-        'Polish to reduce minor abrasions and dullness',
-        'Sealant protection (ceramic coating available)',
-      ],
-    },
-  ];
+export default function Pricing() {
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [vehicle, setVehicle] = useState("sedan");
+  const [selectedAddOns, setSelectedAddOns] = useState({
+    engineBay: false,
+    petHair: false,
+    headlight: false,
+  });
 
-  const currentPricing = activeTab === 'basic' ? basicPricing : fullPricing;
+  const basePrice = vehiclePrices[vehicle] || 0;
+
+  const addOnTotal = useMemo(() => {
+    return Object.entries(selectedAddOns).reduce((total, [key, isSelected]) => {
+      return isSelected ? total + addOnPrices[key] : total;
+    }, 0);
+  }, [selectedAddOns]);
+
+  const total = basePrice + addOnTotal;
+  const deposit = total > 0 ? Math.max(50, Math.round(total * 0.3)) : 0;
+
+  const handleAddOnChange = (key) => {
+    setSelectedAddOns((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
+  const handleBooking = (e) => {
+    e.preventDefault();
+
+    if (!fullName.trim() || !email.trim()) {
+      alert("Please fill out your name and email.");
+      return;
+    }
+
+    const chosenAddOns = Object.entries(selectedAddOns)
+      .filter(([, selected]) => selected)
+      .map(([key]) => {
+        if (key === "engineBay") return "Engine Bay Detail";
+        if (key === "petHair") return "Pet Hair Removal";
+        if (key === "headlight") return "Headlight Restoration";
+        return key;
+      });
+
+    alert(
+      `Booking request received!
+
+Name: ${fullName}
+Email: ${email}
+Vehicle: ${vehicleLabel(vehicle)}
+Total: $${total}
+Deposit Due Today: $${deposit}
+Add-ons: ${chosenAddOns.length ? chosenAddOns.join(", ") : "None"}
+
+Payments are temporarily disabled while the site is being fixed.`
+    );
+
+    console.log("Booking request:", {
+      fullName,
+      email,
+      vehicle,
+      total,
+      deposit,
+      addOns: chosenAddOns,
+    });
+  };
 
   return (
-    <section id="pricing" className="section section-alt">
-      <div className="container">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center max-w-4xl mx-auto mb-16"
+    <section
+      style={{
+        backgroundColor: "#000",
+        color: "#fff",
+        minHeight: "100vh",
+        padding: "60px 20px",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "760px",
+          margin: "0 auto",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "2rem",
+            fontWeight: "700",
+            marginBottom: "32px",
+          }}
         >
-          <div className="eyebrow justify-center">Service Pricing</div>
-          <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-            Choose Your <span className="text-red-500">Detail Package</span>
-          </h2>
-          <p className="text-xl text-gray-300">
-            Transparent pricing based on vehicle size with no hidden fees.
-          </p>
-        </motion.div>
+          Masters Auto Booking
+        </h2>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="flex justify-center mb-12"
-        >
-          <div className="inline-flex bg-gray-900 rounded-full p-1 border border-gray-800">
-            <button
-              onClick={() => setActiveTab('basic')}
-              className={`px-6 py-3 rounded-full font-medium transition-all ${
-                activeTab === 'basic'
-                  ? 'bg-red-600 text-white'
-                  : 'text-gray-400 hover:text-white'
-              }`}
+        <form onSubmit={handleBooking}>
+          <input
+            type="text"
+            placeholder="Full Name"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            style={inputStyle}
+          />
+
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={inputStyle}
+          />
+
+          <select
+            value={vehicle}
+            onChange={(e) => setVehicle(e.target.value)}
+            style={inputStyle}
+          >
+            <option value="sedan">Sedan (${vehiclePrices.sedan})</option>
+            <option value="suv">SUV (${vehiclePrices.suv})</option>
+            <option value="truck">Truck (${vehiclePrices.truck})</option>
+            <option value="xlarge">Extra Large SUV / Van (${vehiclePrices.xlarge})</option>
+          </select>
+
+          <div style={{ marginTop: "40px", marginBottom: "30px" }}>
+            <h3
+              style={{
+                fontSize: "1.5rem",
+                fontWeight: "700",
+                marginBottom: "20px",
+              }}
             >
-              Basic Detail
-            </button>
-            <button
-              onClick={() => setActiveTab('full')}
-              className={`px-6 py-3 rounded-full font-medium transition-all ${
-                activeTab === 'full'
-                  ? 'bg-red-600 text-white'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              Full Detail
-            </button>
+              Add-ons
+            </h3>
+
+            <label style={checkboxLabelStyle}>
+              <input
+                type="checkbox"
+                checked={selectedAddOns.engineBay}
+                onChange={() => handleAddOnChange("engineBay")}
+                style={checkboxStyle}
+              />
+              Engine Bay Detail (+${addOnPrices.engineBay})
+            </label>
+
+            <label style={checkboxLabelStyle}>
+              <input
+                type="checkbox"
+                checked={selectedAddOns.petHair}
+                onChange={() => handleAddOnChange("petHair")}
+                style={checkboxStyle}
+              />
+              Pet Hair Removal (+${addOnPrices.petHair})
+            </label>
+
+            <label style={checkboxLabelStyle}>
+              <input
+                type="checkbox"
+                checked={selectedAddOns.headlight}
+                onChange={() => handleAddOnChange("headlight")}
+                style={checkboxStyle}
+              />
+              Headlight Restoration (+${addOnPrices.headlight})
+            </label>
           </div>
-        </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-          {currentPricing.map((tier, index) => (
-            <motion.div
-              key={`${activeTab}-${tier.size}`}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="card hover:border-red-900/50 transition-all duration-300 hover:shadow-2xl hover:shadow-red-900/20"
-            >
-              <div className="text-center mb-6">
-                <div className="text-red-400 font-bold text-sm mb-2">{tier.description}</div>
-                <h3 className="text-xl font-bold mb-2">{tier.size}</h3>
-                <div className="text-3xl font-black text-red-500 mb-2">${tier.price}</div>
-                <div className="text-sm text-gray-500">{tier.examples}</div>
-              </div>
-
-              <div className="space-y-3 mb-6">
-                {tier.included.map((feature, featureIndex) => (
-                  <div key={featureIndex} className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-2 flex-shrink-0" />
-                    <span className="text-sm text-gray-300">{feature}</span>
-                  </div>
-                ))}
-              </div>
-
-              <button
-                type="button"
-                onClick={() => handleBooking(tier.price, tier.size)}
-                className="btn-primary w-full justify-center text-sm"
-              >
-                <Phone size={16} />
-                Book Now
-              </button>
-            </motion.div>
-          ))}
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-16"
-        >
-          <h3 className="text-2xl font-bold mb-8 text-center">Service Add-ons</h3>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="card text-center hover:border-red-900/50 transition-all duration-300">
-              <h4 className="font-bold mb-2">Headlights Restoration</h4>
-              <div className="text-2xl font-black text-red-500 mb-3">$26</div>
-              <p className="text-gray-400 text-sm">Restore clarity and add UV protection</p>
-            </div>
-            <div className="card text-center hover:border-red-900/50 transition-all duration-300">
-              <h4 className="font-bold mb-2">Spot Cleaning</h4>
-              <div className="text-2xl font-black text-red-500 mb-3">$35</div>
-              <p className="text-gray-400 text-sm">Target specific stains and areas</p>
-            </div>
-            <div className="card text-center hover:border-red-900/50 transition-all duration-300">
-              <h4 className="font-bold mb-2">Deep Shampoo</h4>
-              <div className="text-2xl font-black text-red-500 mb-3">$100</div>
-              <p className="text-gray-400 text-sm">Deep clean carpets and upholstery</p>
-            </div>
+          <div style={{ marginBottom: "30px", lineHeight: "1.8" }}>
+            <p style={{ fontSize: "1.5rem", fontWeight: "700", margin: "0 0 8px 0" }}>
+              Total: ${total}
+            </p>
+            <p style={{ fontSize: "1.25rem", margin: 0 }}>
+              Deposit Due Today: ${deposit}
+            </p>
           </div>
-          <p className="text-center text-gray-400 text-sm mt-6">
-            *Add-ons available with Full Detail service only*
-          </p>
-        </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-12 text-center"
-        >
-          <p className="text-gray-400 text-sm">
-            *Prices may vary based on condition of vehicle*
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-16"
-        >
-          <div className="card">
-            <h3 className="text-2xl font-bold mb-6 text-center">Package Comparison</h3>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <h4 className="text-lg font-bold text-red-400 mb-3">Basic Detail</h4>
-                <p className="text-gray-300 mb-4">
-                  Perfect for regular maintenance between deep cleans. Includes exterior wash,
-                  interior cleaning, and protective wax application.
-                </p>
-                <ul className="space-y-2 text-sm text-gray-400">
-                  <li>• Hand wash and wax</li>
-                  <li>• Interior surface cleaning</li>
-                  <li>• Tire and trim dressing</li>
-                  <li>• Window cleaning</li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="text-lg font-bold text-red-400 mb-3">Full Detail</h4>
-                <p className="text-gray-300 mb-4">
-                  Comprehensive restoration with paint correction, clay bar treatment, and
-                  long-lasting sealant protection. Ceramic coating upgrade available.
-                </p>
-                <ul className="space-y-2 text-sm text-gray-400">
-                  <li>• Everything in Basic, plus:</li>
-                  <li>• Paint decontamination (clay bar)</li>
-                  <li>• Paint correction and polishing</li>
-                  <li>• Sealant or ceramic protection</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+          <button type="submit" style={buttonStyle}>
+            Book Request
+          </button>
+        </form>
       </div>
     </section>
   );
+}
+
+function vehicleLabel(vehicle) {
+  switch (vehicle) {
+    case "sedan":
+      return "Sedan";
+    case "suv":
+      return "SUV";
+    case "truck":
+      return "Truck";
+    case "xlarge":
+      return "Extra Large SUV / Van";
+    default:
+      return vehicle;
+  }
+}
+
+const inputStyle = {
+  width: "100%",
+  padding: "22px 20px",
+  fontSize: "1.25rem",
+  borderRadius: "14px",
+  border: "1px solid #222",
+  marginBottom: "20px",
+  boxSizing: "border-box",
+  backgroundColor: "#f1f1f1",
+  color: "#111",
 };
 
-export default Pricing;
+const checkboxLabelStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "14px",
+  fontSize: "1.2rem",
+  marginBottom: "18px",
+};
+
+const checkboxStyle = {
+  width: "20px",
+  height: "20px",
+};
+
+const buttonStyle = {
+  width: "100%",
+  padding: "22px",
+  fontSize: "1.5rem",
+  fontWeight: "700",
+  border: "none",
+  borderRadius: "14px",
+  backgroundColor: "#ff1d1d",
+  color: "#fff",
+  cursor: "pointer",
+};
