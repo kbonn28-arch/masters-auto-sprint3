@@ -13,9 +13,25 @@ const addOnPrices = {
   headlight: 60,
 };
 
+function vehicleLabel(vehicle) {
+  switch (vehicle) {
+    case "sedan":
+      return "Sedan";
+    case "suv":
+      return "SUV";
+    case "truck":
+      return "Truck";
+    case "xlarge":
+      return "Extra Large SUV / Van";
+    default:
+      return vehicle;
+  }
+}
+
 export default function Pricing() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [vehicle, setVehicle] = useState("sedan");
   const [selectedAddOns, setSelectedAddOns] = useState({
     engineBay: false,
@@ -26,8 +42,8 @@ export default function Pricing() {
   const basePrice = vehiclePrices[vehicle] || 0;
 
   const addOnTotal = useMemo(() => {
-    return Object.entries(selectedAddOns).reduce((total, [key, isSelected]) => {
-      return isSelected ? total + addOnPrices[key] : total;
+    return Object.entries(selectedAddOns).reduce((total, [key, selected]) => {
+      return selected ? total + addOnPrices[key] : total;
     }, 0);
   }, [selectedAddOns]);
 
@@ -44,8 +60,8 @@ export default function Pricing() {
   const handleBooking = (e) => {
     e.preventDefault();
 
-    if (!fullName.trim() || !email.trim()) {
-      alert("Please fill out your name and email.");
+    if (!fullName.trim() || !email.trim() || !phone.trim()) {
+      alert("Please fill out your name, email, and phone number.");
       return;
     }
 
@@ -58,27 +74,24 @@ export default function Pricing() {
         return key;
       });
 
-    alert(
-      `Booking request received!
+    const subject = `New Booking Request - ${fullName}`;
+    const body = `
+New booking request from Masters Auto website
 
-Name: ${fullName}
-Email: ${email}
+Customer Name: ${fullName}
+Customer Email: ${email}
+Customer Phone: ${phone}
 Vehicle: ${vehicleLabel(vehicle)}
-Total: $${total}
+
+Selected Add-ons: ${chosenAddOns.length ? chosenAddOns.join(", ") : "None"}
+
+Estimated Total: $${total}
 Deposit Due Today: $${deposit}
-Add-ons: ${chosenAddOns.length ? chosenAddOns.join(", ") : "None"}
+    `.trim();
 
-Payments are temporarily disabled while the site is being fixed.`
-    );
-
-    console.log("Booking request:", {
-      fullName,
-      email,
-      vehicle,
-      total,
-      deposit,
-      addOns: chosenAddOns,
-    });
+    window.location.href = `mailto:booking@mastersauto.com?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
   };
 
   return (
@@ -120,6 +133,14 @@ Payments are temporarily disabled while the site is being fixed.`
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            style={inputStyle}
+          />
+
+          <input
+            type="tel"
+            placeholder="Phone Number"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
             style={inputStyle}
           />
 
@@ -186,27 +207,12 @@ Payments are temporarily disabled while the site is being fixed.`
           </div>
 
           <button type="submit" style={buttonStyle}>
-            Book Request
+            Send Booking Request
           </button>
         </form>
       </div>
     </section>
   );
-}
-
-function vehicleLabel(vehicle) {
-  switch (vehicle) {
-    case "sedan":
-      return "Sedan";
-    case "suv":
-      return "SUV";
-    case "truck":
-      return "Truck";
-    case "xlarge":
-      return "Extra Large SUV / Van";
-    default:
-      return vehicle;
-  }
 }
 
 const inputStyle = {
