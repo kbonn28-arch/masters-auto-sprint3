@@ -115,159 +115,256 @@ export default function Pricing() {
 
   return (
     <section
+      id="booking"
       style={{
         backgroundColor: "#000",
         color: "#fff",
         minHeight: "100vh",
-        padding: "60px 20px",
+        padding: "80px 20px",
       }}
     >
       <div
         style={{
-          maxWidth: "760px",
+          maxWidth: "860px",
           margin: "0 auto",
         }}
       >
-        <h2
-          style={{
-            fontSize: "2rem",
-            fontWeight: "700",
-            marginBottom: "32px",
-          }}
-        >
-          Masters Auto Booking
-        </h2>
+        <div style={headerCardStyle}>
+          <p style={eyebrowStyle}>Book Your Detail</p>
+          <h2 style={titleStyle}>Reserve your appointment and pay your deposit online.</h2>
+          <p style={subtitleStyle}>
+            Choose your vehicle size, add any extras, and continue to secure checkout.
+          </p>
+        </div>
 
-        <form onSubmit={handleBooking}>
-          <input
-            type="text"
-            placeholder="Full Name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            style={inputStyle}
-          />
+        <form onSubmit={handleBooking} style={formCardStyle}>
+          <div style={gridStyle}>
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              style={inputStyle}
+            />
 
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={inputStyle}
-          />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={inputStyle}
+            />
 
-          <input
-            type="tel"
-            placeholder="Phone Number"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            style={inputStyle}
-          />
+            <input
+              type="tel"
+              placeholder="Phone Number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              style={inputStyle}
+            />
 
-          <select
-            value={vehicle}
-            onChange={(e) => setVehicle(e.target.value)}
-            style={inputStyle}
-          >
-            <option value="sedan">Sedan (${vehiclePrices.sedan})</option>
-            <option value="suv">SUV (${vehiclePrices.suv})</option>
-            <option value="truck">Truck (${vehiclePrices.truck})</option>
-            <option value="xlarge">Extra Large SUV / Van (${vehiclePrices.xlarge})</option>
-          </select>
-
-          <div style={{ marginTop: "40px", marginBottom: "30px" }}>
-            <h3
-              style={{
-                fontSize: "1.5rem",
-                fontWeight: "700",
-                marginBottom: "20px",
-              }}
+            <select
+              value={vehicle}
+              onChange={(e) => setVehicle(e.target.value)}
+              style={inputStyle}
             >
-              Add-ons
-            </h3>
-
-            <label style={checkboxLabelStyle}>
-              <input
-                type="checkbox"
-                checked={selectedAddOns.engineBay}
-                onChange={() => handleAddOnChange("engineBay")}
-                style={checkboxStyle}
-              />
-              Engine Bay Detail (+${addOnPrices.engineBay})
-            </label>
-
-            <label style={checkboxLabelStyle}>
-              <input
-                type="checkbox"
-                checked={selectedAddOns.petHair}
-                onChange={() => handleAddOnChange("petHair")}
-                style={checkboxStyle}
-              />
-              Pet Hair Removal (+${addOnPrices.petHair})
-            </label>
-
-            <label style={checkboxLabelStyle}>
-              <input
-                type="checkbox"
-                checked={selectedAddOns.headlight}
-                onChange={() => handleAddOnChange("headlight")}
-                style={checkboxStyle}
-              />
-              Headlight Restoration (+${addOnPrices.headlight})
-            </label>
+              <option value="sedan">Sedan (${vehiclePrices.sedan})</option>
+              <option value="suv">SUV (${vehiclePrices.suv})</option>
+              <option value="truck">Truck (${vehiclePrices.truck})</option>
+              <option value="xlarge">Extra Large SUV / Van (${vehiclePrices.xlarge})</option>
+            </select>
           </div>
 
-          <div style={{ marginBottom: "30px", lineHeight: "1.8" }}>
-            <p style={{ fontSize: "1.5rem", fontWeight: "700", margin: "0 0 8px 0" }}>
-              Total: ${total}
-            </p>
-            <p style={{ fontSize: "1.25rem", margin: 0 }}>
-              Deposit Due Today: ${deposit}
-            </p>
+          <div style={{ marginTop: "36px" }}>
+            <h3 style={sectionTitleStyle}>Add-ons</h3>
+
+            <div style={addonGridStyle}>
+              <label style={addonCardStyle}>
+                <input
+                  type="checkbox"
+                  checked={selectedAddOns.engineBay}
+                  onChange={() => handleAddOnChange("engineBay")}
+                  style={checkboxStyle}
+                />
+                <span>Engine Bay Detail (+${addOnPrices.engineBay})</span>
+              </label>
+
+              <label style={addonCardStyle}>
+                <input
+                  type="checkbox"
+                  checked={selectedAddOns.petHair}
+                  onChange={() => handleAddOnChange("petHair")}
+                  style={checkboxStyle}
+                />
+                <span>Pet Hair Removal (+${addOnPrices.petHair})</span>
+              </label>
+
+              <label style={addonCardStyle}>
+                <input
+                  type="checkbox"
+                  checked={selectedAddOns.headlight}
+                  onChange={() => handleAddOnChange("headlight")}
+                  style={checkboxStyle}
+                />
+                <span>Headlight Restoration (+${addOnPrices.headlight})</span>
+              </label>
+            </div>
+          </div>
+
+          <div style={summaryCardStyle}>
+            <div>
+              <p style={summaryLabelStyle}>Estimated Total</p>
+              <p style={summaryValueStyle}>${total}</p>
+            </div>
+            <div>
+              <p style={summaryLabelStyle}>Deposit Due Today</p>
+              <p style={summaryValueStyle}>${deposit}</p>
+            </div>
           </div>
 
           <button type="submit" style={buttonStyle} disabled={loading}>
             {loading ? "Redirecting..." : "Book & Pay Deposit"}
           </button>
+
+          <p style={noteStyle}>
+            Need help before booking?{" "}
+            <a href="tel:5303212936" style={linkStyle}>
+              Call (530) 321-2936
+            </a>
+          </p>
         </form>
       </div>
     </section>
   );
 }
 
+const headerCardStyle = {
+  marginBottom: "24px",
+};
+
+const eyebrowStyle = {
+  color: "#ff3b3b",
+  fontSize: "0.95rem",
+  fontWeight: "700",
+  textTransform: "uppercase",
+  letterSpacing: "0.08em",
+  marginBottom: "10px",
+};
+
+const titleStyle = {
+  fontSize: "2.4rem",
+  fontWeight: "800",
+  lineHeight: 1.15,
+  margin: "0 0 12px 0",
+};
+
+const subtitleStyle = {
+  fontSize: "1.08rem",
+  color: "#cfcfcf",
+  lineHeight: 1.6,
+  maxWidth: "720px",
+  margin: 0,
+};
+
+const formCardStyle = {
+  backgroundColor: "#0a0a0a",
+  border: "1px solid #1f1f1f",
+  borderRadius: "22px",
+  padding: "28px",
+  boxShadow: "0 12px 40px rgba(0,0,0,0.35)",
+};
+
+const gridStyle = {
+  display: "grid",
+  gridTemplateColumns: "1fr",
+  gap: "18px",
+};
+
 const inputStyle = {
   width: "100%",
-  padding: "22px 20px",
-  fontSize: "1.25rem",
+  padding: "20px 18px",
+  fontSize: "1.15rem",
   borderRadius: "14px",
-  border: "1px solid #222",
-  marginBottom: "20px",
+  border: "1px solid #242424",
   boxSizing: "border-box",
-  backgroundColor: "#f1f1f1",
+  backgroundColor: "#f1f4f8",
   color: "#111",
 };
 
-const checkboxLabelStyle = {
+const sectionTitleStyle = {
+  fontSize: "1.35rem",
+  fontWeight: "700",
+  marginBottom: "16px",
+};
+
+const addonGridStyle = {
+  display: "grid",
+  gap: "14px",
+};
+
+const addonCardStyle = {
   display: "flex",
   alignItems: "center",
   gap: "14px",
-  fontSize: "1.2rem",
-  marginBottom: "18px",
+  padding: "16px 18px",
+  borderRadius: "14px",
+  backgroundColor: "#121212",
+  border: "1px solid #242424",
+  fontSize: "1.08rem",
 };
 
 const checkboxStyle = {
   width: "20px",
   height: "20px",
+  flexShrink: 0,
+};
+
+const summaryCardStyle = {
+  display: "grid",
+  gridTemplateColumns: "1fr 1fr",
+  gap: "16px",
+  marginTop: "28px",
+  marginBottom: "24px",
+  padding: "20px",
+  borderRadius: "16px",
+  backgroundColor: "#111827",
+  border: "1px solid #1f2937",
+};
+
+const summaryLabelStyle = {
+  margin: "0 0 8px 0",
+  color: "#c5cad3",
+  fontSize: "0.95rem",
+};
+
+const summaryValueStyle = {
+  margin: 0,
+  fontSize: "2rem",
+  fontWeight: "800",
+  color: "#fff",
 };
 
 const buttonStyle = {
   width: "100%",
-  padding: "22px",
-  fontSize: "1.5rem",
-  fontWeight: "700",
+  padding: "20px",
+  fontSize: "1.35rem",
+  fontWeight: "800",
   border: "none",
-  borderRadius: "14px",
+  borderRadius: "16px",
   backgroundColor: "#ff1d1d",
   color: "#fff",
   cursor: "pointer",
-  opacity: 1,
+};
+
+const noteStyle = {
+  marginTop: "16px",
+  textAlign: "center",
+  color: "#cfcfcf",
+  fontSize: "0.98rem",
+};
+
+const linkStyle = {
+  color: "#fff",
+  fontWeight: "700",
+  textDecoration: "none",
 };

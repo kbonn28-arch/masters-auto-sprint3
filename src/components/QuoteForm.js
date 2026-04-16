@@ -1,314 +1,78 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { useForm, ValidationError } from '@formspree/react';
-import { Phone, MapPin, Clock, Send } from 'lucide-react';
+import React from "react";
 
-const QuoteForm = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    vehicleSize: '',
-    serviceType: '',
-    preferredDate: '',
-    message: ''
-  });
-
-  const [state, handleSubmit] = useForm('meepbqgd');
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const contactInfo = [
-    {
-      icon: Phone,
-      label: 'Phone',
-      value: '(530) 321-2936',
-      href: '#pricing'
-    },
-    {
-      icon: MapPin,
-      label: 'Address',
-      value: '636 Nord Ave Ste A, Chico, CA 95928',
-      href: 'https://www.google.com/maps/search/?api=1&query=636+Nord+Ave+Ste+A,+Chico,+CA+95928'
-    },
-    {
-      icon: Clock,
-      label: 'Hours',
-      value: 'Mon 9AM–5PM • Tue–Thu 8AM–6PM • Sat/Sun Closed',
-      href: null
-    }
-  ];
-
+export default function QuoteForm() {
   return (
-    <section id="quote" className="section section-alt">
-      <div className="container">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center max-w-4xl mx-auto mb-16"
+    <section
+      style={{
+        backgroundColor: "#000",
+        color: "#fff",
+        padding: "60px 20px",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "900px",
+          margin: "0 auto",
+          backgroundColor: "#0d0d0d",
+          border: "1px solid #1f1f1f",
+          borderRadius: "22px",
+          padding: "32px",
+          textAlign: "center",
+        }}
+      >
+        <p
+          style={{
+            color: "#ff3b3b",
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            fontWeight: "800",
+            fontSize: "0.95rem",
+            marginBottom: "10px",
+          }}
         >
-          <div className="eyebrow justify-center">Request Quote</div>
-          <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-            Get Your <span className="text-red-500">Free Quote</span>
-          </h2>
-          <p className="text-xl text-gray-300">
-            Send your service request and we'll get back to you with a detailed quote.
-          </p>
-        </motion.div>
+          Request Quote
+        </p>
 
-        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
-            <div className="card">
-              <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
+        <h2
+          style={{
+            fontSize: "2.1rem",
+            lineHeight: 1.15,
+            margin: "0 0 12px 0",
+            fontWeight: "800",
+          }}
+        >
+          Start your booking online
+        </h2>
 
-              <div className="space-y-4">
-                {contactInfo.map((info, index) => (
-                  <div key={index} className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-red-600/20 rounded-full flex items-center justify-center flex-shrink-0">
-                      <info.icon className="text-red-400" size={24} />
-                    </div>
-                    <div>
-                      <div className="font-bold mb-1">{info.label}</div>
-                      {info.href ? (
-                        <a
-                          href={info.href}
-                          className="text-gray-300 hover:text-red-400 transition-colors"
-                          target={info.href.startsWith('http') ? '_blank' : '_self'}
-                          rel={info.href.startsWith('http') ? 'noopener noreferrer' : ''}
-                        >
-                          {info.value}
-                        </a>
-                      ) : (
-                        <div className="text-gray-300">{info.value}</div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+        <p
+          style={{
+            color: "#d5d5d5",
+            fontSize: "1.05rem",
+            lineHeight: 1.7,
+            maxWidth: "680px",
+            margin: "0 auto 24px",
+          }}
+        >
+          To keep the experience simple, all quotes and bookings now go through the
+          booking form below.
+        </p>
 
-            <div className="card border-red-900/30 bg-red-950/20">
-              <h4 className="text-lg font-bold mb-3">Why Choose Us?</h4>
-              <ul className="space-y-2 text-sm text-gray-300">
-                <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full" />
-                  Professional, experienced detailers
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full" />
-                  Premium products and equipment
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full" />
-                  Satisfaction guaranteed
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full" />
-                  Convenient scheduling options
-                </li>
-              </ul>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
-            <div className="card">
-              <h3 className="text-2xl font-bold mb-6">Service Request Form</h3>
-
-              {state.succeeded && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-6 p-4 bg-green-900/20 border border-green-800 rounded-lg text-green-400"
-                >
-                  Thank you! Your quote request has been submitted successfully. We'll contact you soon.
-                </motion.div>
-              )}
-
-              {state.errors && state.errors.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-6 p-4 bg-red-900/20 border border-red-800 rounded-lg text-red-400"
-                >
-                  Oops! Something went wrong. Please try again or give us a call.
-                </motion.div>
-              )}
-
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium mb-2">
-                      Full Name <span className="text-red-400">*</span>
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:border-red-500 focus:outline-none transition-colors"
-                      placeholder="Your name"
-                    />
-                    <ValidationError prefix="Name" field="name" errors={state.errors} />
-                  </div>
-
-                  <div>
-                    <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                      Phone Number <span className="text-red-400">*</span>
-                    </label>
-                    <input
-                      id="phone"
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:border-red-500 focus:outline-none transition-colors"
-                      placeholder="(530) 555-5555"
-                    />
-                    <ValidationError prefix="Phone" field="phone" errors={state.errors} />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium mb-2">
-                      Email Address <span className="text-red-400">*</span>
-                    </label>
-                    <input
-                      id="email"
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:border-red-500 focus:outline-none transition-colors"
-                      placeholder="you@example.com"
-                    />
-                    <ValidationError prefix="Email" field="email" errors={state.errors} />
-                  </div>
-
-                  <div>
-                    <label htmlFor="vehicleSize" className="block text-sm font-medium mb-2">
-                      Vehicle Size <span className="text-red-400">*</span>
-                    </label>
-                    <select
-                      id="vehicleSize"
-                      name="vehicleSize"
-                      value={formData.vehicleSize}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg text-white focus:border-red-500 focus:outline-none transition-colors"
-                    >
-                      <option value="">Select size</option>
-                      <option value="Extra Small">Extra Small</option>
-                      <option value="Small">Small</option>
-                      <option value="Medium">Medium</option>
-                      <option value="Large">Large</option>
-                      <option value="Extra Large">Extra Large</option>
-                    </select>
-                    <ValidationError prefix="Vehicle Size" field="vehicleSize" errors={state.errors} />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="serviceType" className="block text-sm font-medium mb-2">
-                      Service Type <span className="text-red-400">*</span>
-                    </label>
-                    <select
-                      id="serviceType"
-                      name="serviceType"
-                      value={formData.serviceType}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg text-white focus:border-red-500 focus:outline-none transition-colors"
-                    >
-                      <option value="">Select service</option>
-                      <option value="Basic Cleaning with Wax">Basic Cleaning with Wax</option>
-                      <option value="Full Detail">Full Detail</option>
-                      <option value="Ceramic Coating">Ceramic Coating</option>
-                      <option value="Headlights Restoration">Headlights Restoration</option>
-                      <option value="Spot Cleaning">Spot Cleaning</option>
-                      <option value="Deep Shampoo Cleaning">Deep Shampoo Cleaning</option>
-                    </select>
-                    <ValidationError prefix="Service Type" field="serviceType" errors={state.errors} />
-                  </div>
-
-                  <div>
-                    <label htmlFor="preferredDate" className="block text-sm font-medium mb-2">
-                      Preferred Date
-                    </label>
-                    <input
-                      id="preferredDate"
-                      type="date"
-                      name="preferredDate"
-                      value={formData.preferredDate}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg text-white focus:border-red-500 focus:outline-none transition-colors"
-                    />
-                    <ValidationError prefix="Preferred Date" field="preferredDate" errors={state.errors} />
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium mb-2">
-                    Vehicle / Service Notes <span className="text-red-400">*</span>
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    rows={4}
-                    required
-                    className="w-full px-4 py-3 bg-black border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:border-red-500 focus:outline-none transition-colors resize-none"
-                    placeholder="Tell us about your vehicle, stains, paint issues, or anything else."
-                  />
-                  <ValidationError prefix="Message" field="message" errors={state.errors} />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={state.submitting}
-                  className="btn-primary w-full justify-center py-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                >
-                  {state.submitting ? (
-                    'Submitting...'
-                  ) : (
-                    <>
-                      <Send size={20} />
-                      Submit Request
-                    </>
-                  )}
-                </button>
-
-                <p className="text-sm text-gray-400 text-center">
-                  We will follow up with you after reviewing your request.
-                </p>
-              </form>
-            </div>
-          </motion.div>
-        </div>
+        <a
+          href="#booking"
+          style={{
+            display: "inline-block",
+            backgroundColor: "#ff1d1d",
+            color: "#fff",
+            textDecoration: "none",
+            padding: "16px 24px",
+            borderRadius: "999px",
+            fontWeight: "800",
+            fontSize: "1.05rem",
+          }}
+        >
+          Go to Booking Form
+        </a>
       </div>
     </section>
   );
-};
-
-export default QuoteForm;
+}
