@@ -14,7 +14,21 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: function (origin, callback) {
+      const allowedOrigins = [
+        process.env.CLIENT_URL,
+        "https://masters-auto-sprint3-git-main-kbonn28-archs-projects.vercel.app",
+        "https://mastersautodetail.com",
+        "https://www.mastersautodetail.com",
+      ];
+
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "OPTIONS"],
   })
 );
 
@@ -27,7 +41,18 @@ app.get("/", (req, res) => {
 app.get("/api/health", (req, res) => {
   res.json({ ok: true, message: "Server is running" });
 });
-
+app.get("/api/test-stripe", async (req, res) => {
+  try {
+    const balance = await stripe.balance.retrieve();
+    res.json({ success: true, balance });
+  } catch (err) {
+    console.error("STRIPE TEST ERROR:", err);
+    res.status(500).json({
+      error: err.message,
+      type: err.type,
+    });
+  }
+});
 app.post("/api/payments/create-booking-checkout", async (req, res) => {
   try {
     console.log("Payment route hit");
