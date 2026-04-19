@@ -13,21 +13,6 @@ const addOnPrices = {
   headlight: 60,
 };
 
-function vehicleLabel(vehicle) {
-  switch (vehicle) {
-    case "sedan":
-      return "Sedan";
-    case "suv":
-      return "SUV";
-    case "truck":
-      return "Truck";
-    case "xlarge":
-      return "Extra Large SUV / Van";
-    default:
-      return vehicle;
-  }
-}
-
 export default function Pricing() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -58,62 +43,16 @@ export default function Pricing() {
     }));
   };
 
-const handleBooking = (e) => {
-  e.preventDefault();
+  const handleBooking = (e) => {
+    e.preventDefault();
 
-  if (!fullName.trim() || !email.trim() || !phone.trim()) {
-    alert("Please fill out your name, email, and phone number.");
-    return;
-  }
-
-  window.location.href = "https://buy.stripe.com/test_14A28sdY36PU7tmc3t4wM00";
-};
-
-    const chosenAddOns = Object.entries(selectedAddOns)
-      .filter(([, selected]) => selected)
-      .map(([key]) => {
-        if (key === "engineBay") return { name: "Engine Bay Detail", price: 40 };
-        if (key === "petHair") return { name: "Pet Hair Removal", price: 35 };
-        if (key === "headlight") return { name: "Headlight Restoration", price: 60 };
-        return { name: key, price: 0 };
-      });
-
-    try {
-      setLoading(true);
-
-      const res = await fetch(
-        "https://masters-auto-sprint3.onrender.com/api/payments/create-booking-checkout",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            bookingId: `bk_${Date.now()}`,
-            customerName: fullName,
-            customerEmail: email,
-            serviceName: "Detail Booking",
-            vehicleSize: vehicleLabel(vehicle),
-            addOns: chosenAddOns,
-            totalPrice: total,
-            depositAmount: deposit,
-          }),
-        }
-      );
-
-      const data = await res.json();
-
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert(data.error || "Error starting payment");
-        setLoading(false);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Payment failed");
-      setLoading(false);
+    if (!fullName.trim() || !email.trim() || !phone.trim()) {
+      alert("Please fill out your name, email, and phone number.");
+      return;
     }
+
+    setLoading(true);
+    window.location.href = "https://buy.stripe.com/test_14A28sdY36PU7tmc3t4wM00";
   };
 
   return (
