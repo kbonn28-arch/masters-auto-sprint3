@@ -1,5 +1,8 @@
 import React, { useMemo, useState } from "react";
 
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/meepbqgd";
+const STRIPE_CHECKOUT_URL = "https://buy.stripe.com/test_14A28sdY36PU7tmc3t4wM00";
+
 const vehiclePrices = {
   sedan: 120,
   suv: 160,
@@ -7,10 +10,23 @@ const vehiclePrices = {
   xlarge: 220,
 };
 
+const vehicleLabels = {
+  sedan: "Sedan",
+  suv: "SUV",
+  truck: "Truck",
+  xlarge: "Extra Large SUV / Van",
+};
+
 const addOnPrices = {
   engineBay: 40,
   petHair: 35,
   headlight: 60,
+};
+
+const addOnLabels = {
+  engineBay: "Engine Bay Detail",
+  petHair: "Pet Hair Removal",
+  headlight: "Headlight Restoration",
 };
 
 export default function Pricing() {
@@ -33,6 +49,12 @@ export default function Pricing() {
     }, 0);
   }, [selectedAddOns]);
 
+  const selectedAddOnNames = useMemo(() => {
+    return Object.entries(selectedAddOns)
+      .filter(([, selected]) => selected)
+      .map(([key]) => addOnLabels[key]);
+  }, [selectedAddOns]);
+
   const total = basePrice + addOnTotal;
   const deposit = total > 0 ? Math.max(50, Math.round(total * 0.3)) : 0;
 
@@ -43,7 +65,7 @@ export default function Pricing() {
     }));
   };
 
-  const handleBooking = (e) => {
+  const handleBooking = async (e) => {
     e.preventDefault();
 
     if (!fullName.trim() || !email.trim() || !phone.trim()) {
@@ -52,7 +74,41 @@ export default function Pricing() {
     }
 
     setLoading(true);
-    window.location.href = "https://buy.stripe.com/test_14A28sdY36PU7tmc3t4wM00";
+
+    try {
+      const payload = {
+        customerName: fullName,
+        email,
+        phone,
+        vehicleType: vehicle,
+        vehicleLabel: vehicleLabels[vehicle],
+        selectedAddOns: selectedAddOnNames.join(", ") || "None",
+        estimatedTotal: total,
+        depositDueToday: deposit,
+        bookingSource: "Website booking form",
+        paymentStatus: "Stripe checkout started",
+        _subject: `New Booking Deposit Lead - ${fullName}`,
+      };
+
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Formspree submission failed");
+      }
+
+      window.location.href = STRIPE_CHECKOUT_URL;
+    } catch (error) {
+      console.error("Booking submission error:", error);
+      alert("There was a problem saving your booking details. Please try again.");
+      setLoading(false);
+    }
   };
 
   return (
@@ -165,7 +221,7 @@ export default function Pricing() {
           </div>
 
           <button type="submit" style={buttonStyle} disabled={loading}>
-            {loading ? "Redirecting..." : "Book & Pay Deposit"}
+            {loading ? "Saving details..." : "Book & Pay Deposit"}
           </button>
 
           <p style={noteStyle}>
@@ -241,72 +297,70 @@ const sectionTitleStyle = {
 
 const addonGridStyle = {
   display: "grid",
+  gridTemplateColumns: "1fr",
   gap: "14px",
 };
 
 const addonCardStyle = {
   display: "flex",
   alignItems: "center",
-  gap: "14px",
-  padding: "16px 18px",
+  gap: "12px",
+  backgroundColor: "#111",
+  border: "1px solid #1f1f1f",
   borderRadius: "14px",
-  backgroundColor: "#121212",
-  border: "1px solid #242424",
-  fontSize: "1.08rem",
+  padding: "16px 18px",
+  cursor: "pointer",
 };
 
 const checkboxStyle = {
-  width: "20px",
-  height: "20px",
-  flexShrink: 0,
+  width: "18px",
+  height: "18px",
 };
 
 const summaryCardStyle = {
-  display: "grid",
-  gridTemplateColumns: "1fr 1fr",
-  gap: "16px",
   marginTop: "28px",
-  marginBottom: "24px",
-  padding: "20px",
-  borderRadius: "16px",
-  backgroundColor: "#111827",
-  border: "1px solid #1f2937",
+  padding: "22px",
+  borderRadius: "18px",
+  backgroundColor: "#121212",
+  border: "1px solid #1f1f1f",
+  display: "grid",
+  gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+  gap: "16px",
 };
 
 const summaryLabelStyle = {
-  margin: "0 0 8px 0",
-  color: "#c5cad3",
+  color: "#bcbcbc",
   fontSize: "0.95rem",
+  margin: "0 0 8px 0",
 };
 
 const summaryValueStyle = {
-  margin: 0,
-  fontSize: "2rem",
-  fontWeight: "800",
   color: "#fff",
+  fontWeight: "800",
+  fontSize: "1.8rem",
+  margin: 0,
 };
 
 const buttonStyle = {
   width: "100%",
-  padding: "20px",
-  fontSize: "1.35rem",
-  fontWeight: "800",
+  marginTop: "28px",
+  padding: "18px 20px",
+  borderRadius: "999px",
   border: "none",
-  borderRadius: "16px",
   backgroundColor: "#ff1d1d",
   color: "#fff",
+  fontWeight: "800",
+  fontSize: "1.05rem",
   cursor: "pointer",
 };
 
 const noteStyle = {
-  marginTop: "16px",
+  marginTop: "18px",
   textAlign: "center",
-  color: "#cfcfcf",
+  color: "#d0d0d0",
   fontSize: "0.98rem",
 };
 
 const linkStyle = {
   color: "#fff",
-  fontWeight: "700",
-  textDecoration: "none",
 };
