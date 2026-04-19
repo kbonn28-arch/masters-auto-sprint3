@@ -58,13 +58,16 @@ export default function Pricing() {
     }));
   };
 
-  const handleBooking = async (e) => {
-    e.preventDefault();
+const handleBooking = (e) => {
+  e.preventDefault();
 
-    if (!fullName.trim() || !email.trim() || !phone.trim()) {
-      alert("Please fill out your name, email, and phone number.");
-      return;
-    }
+  if (!fullName.trim() || !email.trim() || !phone.trim()) {
+    alert("Please fill out your name, email, and phone number.");
+    return;
+  }
+
+  window.location.href = "https://buy.stripe.com/test_14A28sdY36PU7tmc3t4wM00";
+};
 
     const chosenAddOns = Object.entries(selectedAddOns)
       .filter(([, selected]) => selected)
