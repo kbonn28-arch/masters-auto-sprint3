@@ -1,113 +1,306 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { CheckCircle, Award, Users, Clock } from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import { CheckCircle2, Shield, Sparkles, Users, MapPin, Clock3 } from "lucide-react";
 
 const About = () => {
-  const features = [
+  const highlights = [
     {
-      icon: CheckCircle,
-      title: 'Quality Service',
-      description: 'Professional detailing with attention to every detail'
+      icon: Sparkles,
+      title: "Professional Detailing",
+      description:
+        "Interior and exterior services designed to restore a clean, polished finish.",
     },
     {
-      icon: Award,
-      title: 'Expert Care',
-      description: 'Trained professionals using industry-leading products'
+      icon: Shield,
+      title: "Vehicle Protection",
+      description:
+        "Paint correction and ceramic options that help protect your investment long-term.",
     },
     {
       icon: Users,
-      title: 'Customer Focused',
-      description: 'From quote to pickup, we prioritize your satisfaction'
+      title: "Customer-Focused Service",
+      description:
+        "A straightforward experience built around clear communication and quality results.",
+    },
+  ];
+
+  const checklist = [
+    "Interior and exterior detailing for a complete refresh",
+    "Paint correction to improve gloss and reduce surface imperfections",
+    "Ceramic coating support for added protection and easier maintenance",
+    "Clear pricing and service guidance for faster booking decisions",
+  ];
+
+  const quickFacts = [
+    {
+      icon: MapPin,
+      label: "Location",
+      value: "Chico, California",
     },
     {
-      icon: Clock,
-      title: 'Efficient Service',
-      description: 'Timely completion without compromising quality'
-    }
+      icon: Clock3,
+      label: "Focus",
+      value: "Quality workmanship and efficient service",
+    },
+    {
+      icon: Shield,
+      label: "Goal",
+      value: "Protect, restore, and maintain your vehicle",
+    },
   ];
 
   return (
-    <section id="about" className="section">
+    <section
+      id="about"
+      className="section"
+      style={{
+        background:
+          "linear-gradient(180deg, #050505 0%, #000000 100%)",
+      }}
+    >
       <div className="container">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 26 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
           className="text-center max-w-4xl mx-auto mb-16"
         >
-          <div className="eyebrow justify-center">Master's Auto Detail, Chico CA</div>
+          <div className="eyebrow justify-center">About Master&apos;s Auto Detail</div>
           <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-            About <span className="text-red-500">Master's Auto Detail</span>
+            Built around <span className="text-red-500">quality care</span> and
+            lasting results
           </h2>
-          <p className="text-xl text-gray-300">
-            Professional car care with a focus on quality service, vehicle protection, and customer satisfaction.
+          <p className="text-xl text-gray-300 leading-relaxed">
+            At Master&apos;s Auto Detail, we help Chico drivers restore, protect,
+            and maintain their vehicles with professional detailing, careful
+            workmanship, and customer service you can trust.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Column - Description */}
+        <div className="grid lg:grid-cols-2 gap-12 items-stretch">
+          {/* Left */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: -28 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="space-y-6"
+            transition={{ duration: 0.6 }}
+            className="card"
+            style={{
+              border: "1px solid rgba(255,255,255,0.07)",
+              borderRadius: "28px",
+              background:
+                "linear-gradient(180deg, rgba(18,18,18,0.96) 0%, rgba(8,8,8,0.98) 100%)",
+              padding: "32px",
+            }}
           >
-            <div className="card">
-              <p className="text-gray-300 leading-relaxed mb-6">
-                In Chico, Master's Auto Detail offers auto detailing, paint correction, Ceramic Pro application,
-                and more. The goal is to help protect your investment and leave both the exterior and interior
-                looking and feeling revitalized.
-              </p>
-              
-              <div className="space-y-4">
-                {[
-                  'Auto detailing for exterior and interior refresh',
-                  'Paint correction for improved gloss and finish',
-                  'Ceramic coating support for long-term protection',
-                  'Customer-focused service from quote to pickup'
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center gap-3">
-                    <CheckCircle className="text-red-500 flex-shrink-0" size={20} />
-                    <span className="text-gray-300">{item}</span>
-                  </div>
-                ))}
-              </div>
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "10px",
+                padding: "10px 14px",
+                borderRadius: "999px",
+                background: "rgba(239,68,68,0.10)",
+                border: "1px solid rgba(239,68,68,0.18)",
+                color: "#f87171",
+                fontWeight: "800",
+                fontSize: "0.85rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                marginBottom: "20px",
+              }}
+            >
+              <Shield size={16} />
+              Why Customers Choose Us
+            </div>
+
+            <h3
+              style={{
+                fontSize: "2rem",
+                fontWeight: "900",
+                lineHeight: 1.1,
+                marginBottom: "16px",
+                color: "#ffffff",
+              }}
+            >
+              Professional car care with a focus on protection and detail
+            </h3>
+
+            <p
+              style={{
+                color: "#d1d5db",
+                lineHeight: 1.8,
+                fontSize: "1.02rem",
+                marginBottom: "24px",
+              }}
+            >
+              Whether your vehicle needs a simple refresh or a deeper restoration,
+              our goal is the same: deliver clean, consistent results that help
+              your car look better, feel better, and stay protected longer.
+            </p>
+
+            <div className="space-y-4">
+              {checklist.map((item, index) => (
+                <div
+                  key={index}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "12px",
+                    padding: "12px 0",
+                    borderBottom:
+                      index !== checklist.length - 1
+                        ? "1px solid rgba(255,255,255,0.06)"
+                        : "none",
+                  }}
+                >
+                  <CheckCircle2
+                    size={20}
+                    style={{ color: "#ef4444", flexShrink: 0, marginTop: "2px" }}
+                  />
+                  <span
+                    style={{
+                      color: "#e5e7eb",
+                      lineHeight: 1.7,
+                      fontSize: "0.98rem",
+                    }}
+                  >
+                    {item}
+                  </span>
+                </div>
+              ))}
             </div>
           </motion.div>
 
-          {/* Right Column - Mission & Features */}
+          {/* Right */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 28 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="space-y-6"
+            transition={{ duration: 0.6 }}
+            style={{
+              display: "grid",
+              gap: "18px",
+            }}
           >
-            <div className="card">
-              <div className="eyebrow mb-4">Mission Statement</div>
-              <p className="text-gray-300 leading-relaxed">
-                At Master's Auto Detail in Chico, CA, the mission is to revitalize and protect each vehicle
-                through quality craftsmanship, outstanding customer service, and a commitment to preserving
-                the aesthetic appeal of the car.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              {features.map((feature, index) => (
-                <motion.div
-                  key={feature.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="card text-center"
+            {highlights.map((item, index) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="card"
+                style={{
+                  border: "1px solid rgba(255,255,255,0.07)",
+                  borderRadius: "24px",
+                  background:
+                    "linear-gradient(180deg, rgba(18,18,18,0.96) 0%, rgba(8,8,8,0.98) 100%)",
+                  padding: "26px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "58px",
+                    height: "58px",
+                    borderRadius: "18px",
+                    background: "rgba(239,68,68,0.12)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: "16px",
+                  }}
                 >
-                  <div className="w-16 h-16 bg-red-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <feature.icon className="text-red-400" size={32} />
+                  <item.icon size={28} color="#ef4444" />
+                </div>
+
+                <h3
+                  style={{
+                    fontSize: "1.3rem",
+                    fontWeight: "800",
+                    marginBottom: "10px",
+                    color: "#fff",
+                  }}
+                >
+                  {item.title}
+                </h3>
+
+                <p
+                  style={{
+                    color: "#cbd5e1",
+                    lineHeight: 1.7,
+                    fontSize: "0.97rem",
+                  }}
+                >
+                  {item.description}
+                </p>
+              </motion.div>
+            ))}
+
+            <div
+              className="card"
+              style={{
+                border: "1px solid rgba(239,68,68,0.16)",
+                borderRadius: "24px",
+                background: "rgba(239,68,68,0.08)",
+                padding: "24px",
+                marginTop: "4px",
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: "1.2rem",
+                  fontWeight: "800",
+                  color: "#fff",
+                  marginBottom: "16px",
+                }}
+              >
+                Quick Facts
+              </h3>
+
+              <div
+                style={{
+                  display: "grid",
+                  gap: "14px",
+                }}
+              >
+                {quickFacts.map((fact) => (
+                  <div
+                    key={fact.label}
+                    style={{
+                      display: "flex",
+                      gap: "12px",
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <fact.icon size={18} color="#f87171" style={{ marginTop: "3px" }} />
+                    <div>
+                      <div
+                        style={{
+                          color: "#fca5a5",
+                          fontWeight: "700",
+                          fontSize: "0.88rem",
+                          marginBottom: "2px",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.06em",
+                        }}
+                      >
+                        {fact.label}
+                      </div>
+                      <div
+                        style={{
+                          color: "#f3f4f6",
+                          lineHeight: 1.6,
+                          fontSize: "0.96rem",
+                        }}
+                      >
+                        {fact.value}
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="font-bold mb-2">{feature.title}</h3>
-                  <p className="text-sm text-gray-400">{feature.description}</p>
-                </motion.div>
-              ))}
+                ))}
+              </div>
             </div>
           </motion.div>
         </div>

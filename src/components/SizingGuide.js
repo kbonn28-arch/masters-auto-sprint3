@@ -1,148 +1,254 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from "react";
+import { motion } from "framer-motion";
+import { Car, Truck, ShieldCheck } from "lucide-react";
 
 const SizingGuide = () => {
   const vehicleSizes = [
     {
-      category: 'Extra Small',
-      type: 'Compact cars',
-      examples: 'Honda Civic, Toyota Corolla',
-      description: 'Small sedans and hatchbacks'
+      category: "Extra Small",
+      type: "Compact cars",
+      examples: "Mini Cooper, Mazda Miata, Honda Fit",
+      description: "Smallest vehicles with compact body size and shorter cabin space.",
     },
     {
-      category: 'Small',
-      type: 'Sedans',
-      examples: 'Toyota Camry, Nissan Altima',
-      description: 'Mid-size sedans'
+      category: "Small",
+      type: "Sedans",
+      examples: "Honda Civic, Toyota Corolla, Nissan Altima",
+      description: "Standard sedans and similar daily-driver passenger vehicles.",
     },
     {
-      category: 'Medium',
-      type: 'Crossovers',
-      examples: 'Honda CR-V, Toyota RAV4',
-      description: 'Compact SUVs and crossovers'
+      category: "Medium",
+      type: "Crossovers / Small SUVs",
+      examples: "Honda CR-V, Toyota RAV4, Ford Escape",
+      description: "Compact SUVs and crossovers with additional cargo and cabin room.",
     },
     {
-      category: 'Large',
-      type: 'Trucks / Mid SUVs',
-      examples: 'Ford F-150, Chevy Silverado',
-      description: 'Full-size trucks and SUVs'
+      category: "Large",
+      type: "Trucks / Larger SUVs",
+      examples: "Ford F-150, Chevy Silverado, Toyota 4Runner",
+      description: "Pickup trucks and larger SUVs that require more surface and interior coverage.",
     },
     {
-      category: 'Extra Large',
-      type: 'Full-size SUVs',
-      examples: 'Chevy Tahoe, Suburban, Ford Expedition',
-      description: 'Large SUVs and vans'
-    }
+      category: "Extra Large",
+      type: "Full-Size SUVs / Vans",
+      examples: "Chevy Tahoe, Suburban, Ford Expedition, large vans",
+      description: "Oversized vehicles with the most exterior area and interior volume.",
+    },
   ];
 
   return (
-    <section id="sizing" className="section">
+    <section
+      id="sizing"
+      className="section"
+      style={{
+        background: "linear-gradient(180deg, #050505 0%, #000000 100%)",
+      }}
+    >
       <div className="container">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
           className="text-center max-w-4xl mx-auto mb-16"
         >
           <div className="eyebrow justify-center">Vehicle Sizing Guide</div>
           <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-            Find Your <span className="text-red-500">Vehicle Size</span>
+            Find the right <span className="text-red-500">vehicle size</span> before you book
           </h2>
-          <p className="text-xl text-gray-300">
-            Use this guide to determine your vehicle category for accurate pricing.
+          <p className="text-xl text-gray-300 leading-relaxed">
+            Pricing is based on vehicle size so you can understand your starting price
+            before submitting a booking request.
           </p>
         </motion.div>
 
-        {/* Sizing Table */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="overflow-x-auto"
+          transition={{ duration: 0.6 }}
+          style={{
+            display: "grid",
+            gap: "18px",
+            marginBottom: "30px",
+          }}
         >
-          <div className="card">
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[600px]">
-                <thead>
-                  <tr className="border-b border-gray-800">
-                    <th className="text-left py-4 px-6 font-bold text-red-400">Size Category</th>
-                    <th className="text-left py-4 px-6 font-bold text-red-400">Vehicle Type</th>
-                    <th className="text-left py-4 px-6 font-bold text-red-400">Example Models</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {vehicleSizes.map((size, index) => (
-                    <motion.tr
-                      key={size.category}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.1 }}
-                      className="border-b border-gray-800 last:border-b-0 hover:bg-gray-800/50 transition-colors"
-                    >
-                      <td className="py-4 px-6">
-                        <div className="font-bold text-white">{size.category}</div>
-                        <div className="text-sm text-gray-400">{size.description}</div>
-                      </td>
-                      <td className="py-4 px-6 text-gray-300">{size.type}</td>
-                      <td className="py-4 px-6 text-gray-300">{size.examples}</td>
-                    </motion.tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Visual Size Guide */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-16"
-        >
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-            {vehicleSizes.map((size, index) => (
-              <motion.div
-                key={size.category}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="card text-center hover:border-red-900/50 transition-all duration-300"
-              >
-                <div className="w-16 h-16 bg-red-600/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-red-400 font-bold text-lg">
-                    {size.category.charAt(0)}
-                  </span>
+          {vehicleSizes.map((size, index) => (
+            <motion.div
+              key={size.category}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.08 }}
+              style={{
+                border: "1px solid rgba(255,255,255,0.07)",
+                borderRadius: "24px",
+                background:
+                  "linear-gradient(180deg, rgba(18,18,18,0.96) 0%, rgba(8,8,8,0.98) 100%)",
+                padding: "24px",
+                display: "grid",
+                gridTemplateColumns: "220px 1fr 1fr",
+                gap: "22px",
+              }}
+              className="sizing-guide-row"
+            >
+              <div>
+                <div
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    padding: "10px 14px",
+                    borderRadius: "999px",
+                    background: "rgba(239,68,68,0.10)",
+                    border: "1px solid rgba(239,68,68,0.18)",
+                    color: "#f87171",
+                    fontWeight: "800",
+                    fontSize: "0.84rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                    marginBottom: "14px",
+                  }}
+                >
+                  {size.category === "Large" || size.category === "Extra Large" ? (
+                    <Truck size={16} />
+                  ) : (
+                    <Car size={16} />
+                  )}
+                  {size.category}
                 </div>
-                <h4 className="font-bold mb-2">{size.category}</h4>
-                <p className="text-sm text-gray-400 mb-2">{size.type}</p>
-                <p className="text-xs text-gray-500">{size.examples}</p>
-              </motion.div>
-            ))}
-          </div>
+
+                <h3
+                  style={{
+                    color: "#fff",
+                    fontSize: "1.25rem",
+                    fontWeight: "800",
+                    marginBottom: "8px",
+                  }}
+                >
+                  {size.type}
+                </h3>
+
+                <p
+                  style={{
+                    color: "#cbd5e1",
+                    lineHeight: 1.65,
+                    fontSize: "0.95rem",
+                    margin: 0,
+                  }}
+                >
+                  {size.description}
+                </p>
+              </div>
+
+              <div>
+                <div
+                  style={{
+                    color: "#fca5a5",
+                    fontWeight: "800",
+                    fontSize: "0.86rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.06em",
+                    marginBottom: "10px",
+                  }}
+                >
+                  Common Examples
+                </div>
+                <p
+                  style={{
+                    color: "#f3f4f6",
+                    fontSize: "0.96rem",
+                    lineHeight: 1.7,
+                    margin: 0,
+                  }}
+                >
+                  {size.examples}
+                </p>
+              </div>
+
+              <div
+                style={{
+                  borderRadius: "18px",
+                  background: "rgba(255,255,255,0.03)",
+                  border: "1px solid rgba(255,255,255,0.06)",
+                  padding: "18px",
+                  alignSelf: "stretch",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <ShieldCheck size={18} color="#ef4444" style={{ marginTop: "3px" }} />
+                  <div>
+                    <div
+                      style={{
+                        color: "#fff",
+                        fontWeight: "800",
+                        fontSize: "0.98rem",
+                        marginBottom: "6px",
+                      }}
+                    >
+                      Pricing Tip
+                    </div>
+                    <p
+                      style={{
+                        color: "#d1d5db",
+                        lineHeight: 1.65,
+                        fontSize: "0.92rem",
+                        margin: 0,
+                      }}
+                    >
+                      If your vehicle is lifted, oversized, or between categories,
+                      choose the larger size for the most accurate starting estimate.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </motion.div>
 
-        {/* Help Section */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 22 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-16"
+          transition={{ duration: 0.6 }}
+          style={{
+            maxWidth: "900px",
+            margin: "0 auto",
+            borderRadius: "22px",
+            background: "rgba(239,68,68,0.08)",
+            border: "1px solid rgba(239,68,68,0.16)",
+            padding: "22px 24px",
+            textAlign: "center",
+          }}
         >
-          <div className="card border-red-900/30 bg-red-950/20 text-center">
-            <h3 className="text-2xl font-bold mb-4">Not sure about your vehicle size?</h3>
-            <p className="text-gray-300 mb-6">
-              Give us a call with your vehicle make and model, and we'll help you determine the correct size 
-              and provide an accurate quote.
-            </p>
-            <a href="#pricing" className="btn-primary">
-              Call for Help
-            </a>
-          </div>
+          <p
+            style={{
+              color: "#fca5a5",
+              fontWeight: "700",
+              lineHeight: 1.7,
+              fontSize: "0.98rem",
+              margin: 0,
+            }}
+          >
+            Final pricing may vary based on vehicle condition, heavy buildup, or specialty
+            service needs. Use this guide to find the closest size before booking.
+          </p>
         </motion.div>
       </div>
+
+      <style>{`
+        @media (max-width: 980px) {
+          .sizing-guide-row {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </section>
   );
 };

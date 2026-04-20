@@ -1,162 +1,292 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Shield, Droplets, Sun, CheckCircle } from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import { Shield, Droplets, Sun, Sparkles, CheckCircle2, ArrowRight } from "lucide-react";
 
 const CeramicCoating = () => {
   const benefits = [
     {
       icon: Shield,
-      title: 'Long-lasting Protection',
-      description: 'Durable ceramic coating lasts years compared to traditional wax'
+      title: "Long-Lasting Protection",
+      description:
+        "A stronger and longer-lasting layer of protection than traditional wax.",
     },
     {
       icon: Droplets,
-      title: 'Water Repellent',
-      description: 'Hydrophobic surface makes water bead and roll off easily'
+      title: "Hydrophobic Finish",
+      description:
+        "Water beads and rolls off more easily, helping your vehicle stay cleaner.",
     },
     {
       icon: Sun,
-      title: 'UV Protection',
-      description: 'Prevents fading and oxidation from sun exposure'
+      title: "UV & Heat Defense",
+      description:
+        "Helps reduce fading, oxidation, and wear from sun exposure in Chico conditions.",
     },
     {
-      icon: CheckCircle,
-      title: 'Chemical Resistant',
-      description: 'Withstands harsh cleaning chemicals and environmental contaminants'
-    }
+      icon: Sparkles,
+      title: "Gloss Enhancement",
+      description:
+        "Adds a deep, polished finish that helps your paint look cleaner and sharper.",
+    },
+  ];
+
+  const includedPoints = [
+    "Helps protect against dirt, contaminants, and environmental exposure",
+    "Makes regular maintenance easier",
+    "Supports a glossy, showroom-like finish",
+    "A strong upgrade for drivers who want longer-term surface protection",
   ];
 
   return (
-    <section id="ceramic" className="section">
+    <section
+      id="ceramic"
+      className="section"
+      style={{
+        background: "linear-gradient(180deg, #000000 0%, #050505 100%)",
+      }}
+    >
       <div className="container">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
           className="text-center max-w-4xl mx-auto mb-16"
         >
-          <div className="eyebrow justify-center">Ceramic coatings in Chico, CA</div>
+          <div className="eyebrow justify-center">Ceramic Coatings in Chico, CA</div>
           <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-            Ceramic Coatings - <span className="text-red-500">Long-lasting Protection</span>
+            Upgrade to <span className="text-red-500">long-lasting protection</span>
           </h2>
-          <p className="text-xl text-gray-300">
-            Premium surface protection designed to help preserve gloss, resist contaminants, and make upkeep easier.
+          <p className="text-xl text-gray-300 leading-relaxed">
+            Ceramic coating is a premium protection option for drivers who want
+            better gloss, easier maintenance, and stronger defense against sun,
+            dirt, and daily wear.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Column - Information */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
-            <div className="card">
-              <h3 className="text-2xl font-bold mb-4">What is Ceramic Coating?</h3>
-              <p className="text-gray-300 leading-relaxed mb-6">
-                Ceramic coating forms a strong protective barrier against scratches, UV rays, dirt, and other contaminants.
-                It creates a glossy, hydrophobic finish that repels water and helps preserve a showroom-like shine.
-              </p>
-              
-              <div className="space-y-4">
-                {[
-                  'Long-lasting protection compared with wax',
-                  'High resistance to chemicals and temperature changes',
-                  'Water-repelling surface for easier cleaning',
-                  'Helps reduce fading and oxidation over time'
-                ].map((benefit, index) => (
-                  <div key={index} className="flex items-center gap-3">
-                    <CheckCircle className="text-red-500 flex-shrink-0" size={20} />
-                    <span className="text-gray-300">{benefit}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Right Column - Benefits Grid */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
-            <div className="grid grid-cols-2 gap-4">
-              {benefits.map((benefit, index) => (
-                <motion.div
-                  key={benefit.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="card text-center hover:border-red-900/50 transition-all duration-300"
-                >
-                  <div className="w-16 h-16 bg-red-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <benefit.icon className="text-red-400" size={32} />
-                  </div>
-                  <h4 className="font-bold mb-2">{benefit.title}</h4>
-                  <p className="text-sm text-gray-400">{benefit.description}</p>
-                </motion.div>
-              ))}
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-              className="card border-red-900/30 bg-red-950/20"
-            >
-              <div className="eyebrow mb-4">Ready for pricing?</div>
-              <h3 className="text-2xl font-bold mb-4">Choose ceramic protection for a stronger finish</h3>
-              <p className="text-gray-300 mb-6">
-                Ask about ceramic coating when requesting a quote or viewing full detail options.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <a href="#quote" className="btn-primary">
-                  View Pricing
-                </a>
-                <a 
-                  href="https://www.google.com/maps/dir/?api=1&destination=636+Nord+Ave+Ste+A,+Chico,+CA+95928"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-secondary"
-                >
-                  Get Directions
-                </a>
-              </div>
-            </motion.div>
-          </motion.div>
-        </div>
-
-        {/* Ceramic Coating Process */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-16"
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1.05fr 0.95fr",
+            gap: "24px",
+          }}
+          className="ceramic-grid"
         >
-          <div className="card">
-            <h3 className="text-2xl font-bold mb-6 text-center">Ceramic Coating Process</h3>
-            <div className="grid md:grid-cols-4 gap-6">
-              {[
-                'Thorough wash and decontamination',
-                'Paint correction and surface preparation',
-                'Multi-stage ceramic coating application',
-                'Curing and final inspection'
-              ].map((step, index) => (
-                <div key={index} className="text-center">
-                  <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white font-bold mx-auto mb-3">
-                    {index + 1}
-                  </div>
-                  <p className="text-sm text-gray-300">{step}</p>
+          {/* Left Column */}
+          <motion.div
+            initial={{ opacity: 0, x: -24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            style={{
+              border: "1px solid rgba(255,255,255,0.07)",
+              borderRadius: "28px",
+              background:
+                "linear-gradient(180deg, rgba(18,18,18,0.96) 0%, rgba(8,8,8,0.98) 100%)",
+              padding: "32px",
+            }}
+          >
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "10px",
+                padding: "10px 14px",
+                borderRadius: "999px",
+                background: "rgba(239,68,68,0.10)",
+                border: "1px solid rgba(239,68,68,0.18)",
+                color: "#f87171",
+                fontWeight: "800",
+                fontSize: "0.84rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                marginBottom: "18px",
+              }}
+            >
+              <Shield size={16} />
+              Why Ceramic Coating
+            </div>
+
+            <h3
+              style={{
+                color: "#fff",
+                fontSize: "2rem",
+                fontWeight: "900",
+                lineHeight: 1.1,
+                marginBottom: "16px",
+              }}
+            >
+              A smarter protection option for drivers who want more than wax
+            </h3>
+
+            <p
+              style={{
+                color: "#d1d5db",
+                fontSize: "1rem",
+                lineHeight: 1.8,
+                marginBottom: "24px",
+              }}
+            >
+              Ceramic coating creates a durable protective layer that helps your
+              vehicle resist water, contaminants, UV exposure, and everyday buildup.
+              It is a strong option for keeping your paint looking cleaner, shinier,
+              and easier to maintain over time.
+            </p>
+
+            <div style={{ display: "grid", gap: "14px" }}>
+              {includedPoints.map((point, index) => (
+                <div
+                  key={index}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "12px",
+                    padding: "12px 0",
+                    borderBottom:
+                      index !== includedPoints.length - 1
+                        ? "1px solid rgba(255,255,255,0.06)"
+                        : "none",
+                  }}
+                >
+                  <CheckCircle2
+                    size={20}
+                    color="#ef4444"
+                    style={{ marginTop: "2px", flexShrink: 0 }}
+                  />
+                  <span
+                    style={{
+                      color: "#e5e7eb",
+                      lineHeight: 1.7,
+                      fontSize: "0.97rem",
+                    }}
+                  >
+                    {point}
+                  </span>
                 </div>
               ))}
             </div>
-          </div>
-        </motion.div>
+
+            <div
+              style={{
+                marginTop: "24px",
+                padding: "18px",
+                borderRadius: "18px",
+                background: "rgba(239,68,68,0.08)",
+                border: "1px solid rgba(239,68,68,0.16)",
+              }}
+            >
+              <p
+                style={{
+                  color: "#fca5a5",
+                  lineHeight: 1.7,
+                  fontSize: "0.95rem",
+                  margin: 0,
+                  fontWeight: "700",
+                }}
+              >
+                Ceramic coating can also be used as an upgrade path from a Full
+                Detail for customers who want added gloss and longer-term paint protection.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Right Column */}
+          <motion.div
+            initial={{ opacity: 0, x: 24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            style={{
+              display: "grid",
+              gap: "16px",
+            }}
+          >
+            {benefits.map((benefit, index) => (
+              <motion.div
+                key={benefit.title}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.08 }}
+                style={{
+                  border: "1px solid rgba(255,255,255,0.07)",
+                  borderRadius: "24px",
+                  background:
+                    "linear-gradient(180deg, rgba(18,18,18,0.96) 0%, rgba(8,8,8,0.98) 100%)",
+                  padding: "24px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "56px",
+                    height: "56px",
+                    borderRadius: "18px",
+                    background: "rgba(239,68,68,0.12)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: "14px",
+                  }}
+                >
+                  <benefit.icon size={28} color="#ef4444" />
+                </div>
+
+                <h3
+                  style={{
+                    color: "#fff",
+                    fontSize: "1.18rem",
+                    fontWeight: "800",
+                    marginBottom: "8px",
+                  }}
+                >
+                  {benefit.title}
+                </h3>
+
+                <p
+                  style={{
+                    color: "#cbd5e1",
+                    lineHeight: 1.7,
+                    fontSize: "0.95rem",
+                    margin: 0,
+                  }}
+                >
+                  {benefit.description}
+                </p>
+              </motion.div>
+            ))}
+
+            <a
+              href="#booking"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "10px",
+                textDecoration: "none",
+                padding: "18px 20px",
+                borderRadius: "999px",
+                background: "linear-gradient(135deg, #ff2a2a 0%, #c40000 100%)",
+                color: "#fff",
+                fontWeight: "800",
+                fontSize: "1rem",
+                marginTop: "6px",
+                boxShadow: "0 16px 34px rgba(255, 0, 0, 0.22)",
+              }}
+            >
+              Request a Ceramic Quote
+              <ArrowRight size={18} />
+            </a>
+          </motion.div>
+        </div>
       </div>
+
+      <style>{`
+        @media (max-width: 980px) {
+          .ceramic-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </section>
   );
 };

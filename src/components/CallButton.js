@@ -1,49 +1,65 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from "react";
+import { motion } from "framer-motion";
+import { PhoneCall } from "lucide-react";
 
-const CallButton = ({ className = '', size = 'default' }) => {
-  const phoneNumber = '(530) 321-2936';
-  const telLink = "#";
+const CallButton = ({ className = "", size = "default", fullWidth = false }) => {
+  const phoneNumberDisplay = "(530) 321-2936";
+  const telLink = "tel:5303212936";
 
   const handleCallClick = () => {
-    // Track call event (for analytics)
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'call_click', {
-        phone_number: phoneNumber,
-        location: window.location.pathname
+    if (typeof window !== "undefined" && typeof window.gtag !== "undefined") {
+      window.gtag("event", "call_click", {
+        phone_number: phoneNumberDisplay,
+        location: window.location.pathname,
       });
     }
   };
 
-  const sizeClasses = {
-    small: 'px-4 py-2 text-sm',
-    default: 'px-6 py-3',
-    large: 'px-8 py-4 text-lg'
+  const sizeStyles = {
+    small: {
+      padding: "10px 16px",
+      fontSize: "0.88rem",
+    },
+    default: {
+      padding: "14px 20px",
+      fontSize: "0.98rem",
+    },
+    large: {
+      padding: "16px 22px",
+      fontSize: "1rem",
+    },
   };
+
+  const activeSize = sizeStyles[size] || sizeStyles.default;
 
   return (
     <motion.a
       href={telLink}
       onClick={handleCallClick}
-      className={`btn-primary ${sizeClasses[size]} ${className}`}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+      whileHover={{ scale: 1.04 }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      className={className}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "10px",
+        width: fullWidth ? "100%" : "auto",
+        textDecoration: "none",
+        borderRadius: "999px",
+        background: "linear-gradient(135deg, #ff2a2a 0%, #c40000 100%)",
+        color: "#fff",
+        fontWeight: "800",
+        border: "none",
+        boxShadow: "0 16px 34px rgba(255, 0, 0, 0.22)",
+        whiteSpace: "nowrap",
+        ...activeSize,
+      }}
+      aria-label={`Call ${phoneNumberDisplay}`}
     >
-      <svg
-        className="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-        />
-      </svg>
-      Call Now
+      <PhoneCall size={18} />
+      Call {phoneNumberDisplay}
     </motion.a>
   );
 };

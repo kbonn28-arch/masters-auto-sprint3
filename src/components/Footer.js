@@ -1,229 +1,405 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Phone, MapPin, Mail, Clock, Facebook, Instagram } from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import { Phone, MapPin, Mail, Clock3, ArrowUpRight } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
-  const footerLinks = {
-    services: [
-      { name: 'Auto Detailing', href: '#about' },
-      { name: 'Individual Services', href: '#services' },
-      { name: 'Ceramic Coatings', href: '#ceramic' },
-      { name: 'Basic Detail', href: '#pricing' },
-      { name: 'Full Detail', href: '#pricing' },
-      { name: 'Gallery', href: '#gallery' },
-    ],
-    company: [
-      { name: 'About Us', href: '#about' },
-      { name: 'Maintenance Club', href: '#maintenance-club' },
-      { name: 'Sizing Guide', href: '#sizing' },
-      { name: 'FAQ', href: '#faq' },
-      { name: 'Reviews', href: '#reviews' },
-      { name: 'Contact', href: '#contact' },
-    ]
-  };
+  const serviceLinks = [
+    { name: "About", href: "#about" },
+    { name: "Add-On Services", href: "#services" },
+    { name: "Pricing & Booking", href: "#booking" },
+    { name: "Sizing Guide", href: "#sizing" },
+    { name: "Ceramic Coating", href: "#ceramic" },
+    { name: "Maintenance Club", href: "#maintenance-club" },
+  ];
+
+  const companyLinks = [
+    { name: "Before & After Gallery", href: "#gallery" },
+    { name: "Reviews", href: "#reviews" },
+    { name: "FAQ", href: "#faq" },
+    { name: "Request a Quote", href: "#quote" },
+    { name: "Contact", href: "#contact" },
+    { name: "Back to Top", href: "#home" },
+  ];
 
   const businessHours = [
-    'Monday: 9AM - 5PM',
-    'Tuesday: 8AM - 6PM',
-    'Wednesday: 8AM - 6PM',
-    'Thursday: 8AM - 6PM',
-    'Friday: 8AM - 6PM',
-    'Saturday: CLOSED',
-    'Sunday: CLOSED'
+    "Monday: 9:00 AM – 5:00 PM",
+    "Tuesday: 8:00 AM – 6:00 PM",
+    "Wednesday: 8:00 AM – 6:00 PM",
+    "Thursday: 8:00 AM – 6:00 PM",
+    "Friday: 8:00 AM – 6:00 PM",
+    "Saturday: Closed",
+    "Sunday: Closed",
   ];
 
   return (
-    <footer className="bg-gray-950 border-t border-gray-900">
-      <div className="container">
-        {/* Main Footer Content */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 py-16">
-          {/* Company Info */}
+    <footer
+      style={{
+        background: "linear-gradient(180deg, #050505 0%, #000000 100%)",
+        borderTop: "1px solid rgba(255,255,255,0.06)",
+      }}
+    >
+      <div className="container" style={{ paddingTop: "70px", paddingBottom: "28px" }}>
+        {/* Top CTA Bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          style={ctaBarStyle}
+        >
+          <div>
+            <div style={ctaEyebrowStyle}>Ready to get started?</div>
+            <h2 style={ctaTitleStyle}>Book your next detail with confidence</h2>
+            <p style={ctaTextStyle}>
+              Choose your package, find your vehicle size, and request service online.
+            </p>
+          </div>
+
+          <a href="#booking" style={ctaButtonStyle}>
+            Go to Booking
+            <ArrowUpRight size={18} />
+          </a>
+        </motion.div>
+
+        {/* Footer Grid */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1.2fr 0.8fr 0.8fr 1fr",
+            gap: "28px",
+            marginTop: "34px",
+          }}
+          className="footer-grid"
+        >
+          {/* Brand / Summary */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="lg:col-span-1"
+            transition={{ duration: 0.6 }}
+            style={cardStyle}
           >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white font-black text-xl">
-                M
+            <div style={brandWrapStyle}>
+              <div style={logoStyle}>M</div>
+              <div>
+                <div style={brandTitleStyle}>Master&apos;s Auto Detail</div>
+                <div style={brandSubStyle}>Chico, California</div>
               </div>
-              <span className="text-xl font-black text-white">Master's Auto Detail</span>
             </div>
-            <p className="text-gray-400 mb-6 leading-relaxed">
-              Professional auto detailing, paint correction, ceramic coatings, and interior care in Chico, California.
+
+            <p style={brandTextStyle}>
+              Professional detailing, paint correction, ceramic coating, and vehicle
+              care designed to help customers understand pricing, book faster, and
+              keep their vehicles looking their best.
             </p>
-            <div className="flex gap-4">
-              <a
-                href="#"
-                className="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center text-gray-400 hover:text-red-400 hover:bg-red-600/20 transition-all duration-300"
-                aria-label="Facebook"
-              >
-                <Facebook size={20} />
+
+            <div style={contactMiniListStyle}>
+              <a href="tel:5303212936" style={miniLinkStyle}>
+                <Phone size={16} />
+                (530) 321-2936
               </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center text-gray-400 hover:text-red-400 hover:bg-red-600/20 transition-all duration-300"
-                aria-label="Instagram"
-              >
-                <Instagram size={20} />
+
+              <a href="mailto:mastersautodetail@yahoo.com" style={miniLinkStyle}>
+                <Mail size={16} />
+                mastersautodetail@yahoo.com
               </a>
             </div>
           </motion.div>
 
           {/* Services Links */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            transition={{ delay: 0.08 }}
+            style={cardStyle}
           >
-            <h3 className="text-lg font-bold mb-6 text-white">Services</h3>
-            <ul className="space-y-3">
-              {footerLinks.services.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-gray-400 hover:text-red-400 transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                </li>
+            <h3 style={columnTitleStyle}>Services</h3>
+            <div style={linkColumnStyle}>
+              {serviceLinks.map((link) => (
+                <a key={link.name} href={link.href} style={footerLinkStyle}>
+                  {link.name}
+                </a>
               ))}
-            </ul>
+            </div>
           </motion.div>
 
           {/* Company Links */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.12 }}
+            style={cardStyle}
           >
-            <h3 className="text-lg font-bold mb-6 text-white">Company</h3>
-            <ul className="space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-gray-400 hover:text-red-400 transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                </li>
+            <h3 style={columnTitleStyle}>Explore</h3>
+            <div style={linkColumnStyle}>
+              {companyLinks.map((link) => (
+                <a key={link.name} href={link.href} style={footerLinkStyle}>
+                  {link.name}
+                </a>
               ))}
-            </ul>
+            </div>
           </motion.div>
 
-          {/* Contact Info */}
+          {/* Contact / Hours */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.16 }}
+            style={cardStyle}
           >
-            <h3 className="text-lg font-bold mb-6 text-white">Contact Info</h3>
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <Phone className="text-red-400" size={20} />
-                <a
-                  href="#pricing"
-                  className="text-gray-400 hover:text-red-400 transition-colors"
-                >
-                  (530) 321-2936
-                </a>
-              </div>
-              <div className="flex items-center gap-3">
-                <MapPin className="text-red-400" size={20} />
-                <span className="text-gray-400 text-sm">
-                  636 Nord Ave Ste A<br />
+            <h3 style={columnTitleStyle}>Contact</h3>
+
+            <div style={infoBlockStyle}>
+              <div style={infoRowStyle}>
+                <MapPin size={16} color="#ef4444" />
+                <span style={infoTextStyle}>
+                  636 Nord Ave Ste A
+                  <br />
                   Chico, CA 95928
                 </span>
               </div>
-              <div className="flex items-center gap-3">
-                <Mail className="text-red-400" size={20} />
-                <a
-                  href="mailto:mastersautodetail@yahoo.com"
-                  className="text-gray-400 hover:text-red-400 transition-colors"
-                >
-                  mastersautodetail@yahoo.com
-                </a>
-              </div>
-            </div>
 
-            {/* Business Hours */}
-            <div className="mt-6 pt-6 border-t border-gray-800">
-              <div className="flex items-center gap-2 mb-3">
-                <Clock className="text-red-400" size={20} />
-                <h4 className="font-bold text-white">Business Hours</h4>
-              </div>
-              <div className="space-y-1">
-                {businessHours.map((hours, index) => (
-                  <div key={index} className="text-sm text-gray-400">
-                    {hours}
-                  </div>
-                ))}
+              <div style={infoRowStyle}>
+                <Clock3 size={16} color="#ef4444" />
+                <div style={{ display: "grid", gap: "4px" }}>
+                  {businessHours.map((hour) => (
+                    <span key={hour} style={hourTextStyle}>
+                      {hour}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </motion.div>
         </div>
 
-        {/* Bottom Footer */}
-        <div className="border-t border-gray-900 py-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="text-gray-400 text-sm"
-            >
-              © {currentYear} Master's Auto Detail • Chico, CA. All rights reserved.
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="flex gap-6 text-sm"
-            >
-              <a href="#" className="text-gray-400 hover:text-red-400 transition-colors">
-                Privacy Policy
-              </a>
-              <a href="#" className="text-gray-400 hover:text-red-400 transition-colors">
-                Terms of Service
-              </a>
-            </motion.div>
+        {/* Bottom Bar */}
+        <div style={bottomBarStyle}>
+          <p style={copyrightStyle}>
+            © {currentYear} Master&apos;s Auto Detail. All rights reserved.
+          </p>
+
+          <div style={bottomLinksStyle}>
+            <a href="#faq" style={bottomLinkStyle}>
+              FAQ
+            </a>
+            <a href="#contact" style={bottomLinkStyle}>
+              Contact
+            </a>
+            <a href="#home" style={bottomLinkStyle}>
+              Back to Top
+            </a>
           </div>
         </div>
-
-        {/* Back to Top Button */}
-        <motion.button
-          initial={{ opacity: 0, scale: 0 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-8 right-8 w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white hover:bg-red-700 transition-all duration-300 shadow-lg hover:shadow-xl z-40"
-          aria-label="Back to top"
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 10l7-7m0 0l7 7m-7-7v18"
-            />
-          </svg>
-        </motion.button>
       </div>
+
+      <style>{`
+        @media (max-width: 1050px) {
+          .footer-grid {
+            grid-template-columns: 1fr 1fr !important;
+          }
+        }
+
+        @media (max-width: 760px) {
+          .footer-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </footer>
   );
+};
+
+/* Styles */
+const ctaBarStyle = {
+  border: "1px solid rgba(255,255,255,0.07)",
+  borderRadius: "30px",
+  background: "linear-gradient(180deg, rgba(22,22,22,0.98) 0%, rgba(8,8,8,0.98) 100%)",
+  padding: "30px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: "20px",
+  flexWrap: "wrap",
+};
+
+const ctaEyebrowStyle = {
+  color: "#f87171",
+  fontWeight: "800",
+  fontSize: "0.84rem",
+  textTransform: "uppercase",
+  letterSpacing: "0.08em",
+  marginBottom: "10px",
+};
+
+const ctaTitleStyle = {
+  color: "#fff",
+  fontSize: "2rem",
+  fontWeight: "900",
+  lineHeight: 1.1,
+  marginBottom: "10px",
+};
+
+const ctaTextStyle = {
+  color: "#d1d5db",
+  lineHeight: 1.7,
+  fontSize: "1rem",
+  margin: 0,
+};
+
+const ctaButtonStyle = {
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "10px",
+  textDecoration: "none",
+  padding: "16px 22px",
+  borderRadius: "999px",
+  background: "linear-gradient(135deg, #ff2a2a 0%, #c40000 100%)",
+  color: "#fff",
+  fontWeight: "800",
+  fontSize: "1rem",
+  boxShadow: "0 16px 34px rgba(255, 0, 0, 0.22)",
+  whiteSpace: "nowrap",
+};
+
+const cardStyle = {
+  border: "1px solid rgba(255,255,255,0.07)",
+  borderRadius: "26px",
+  background: "linear-gradient(180deg, rgba(18,18,18,0.96) 0%, rgba(8,8,8,0.98) 100%)",
+  padding: "26px",
+};
+
+const brandWrapStyle = {
+  display: "flex",
+  alignItems: "center",
+  gap: "14px",
+  marginBottom: "18px",
+};
+
+const logoStyle = {
+  width: "52px",
+  height: "52px",
+  borderRadius: "999px",
+  background: "linear-gradient(135deg, #ff2a2a 0%, #b30000 100%)",
+  color: "#fff",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  fontWeight: "900",
+  fontSize: "1.35rem",
+  boxShadow: "0 14px 28px rgba(255, 0, 0, 0.22)",
+};
+
+const brandTitleStyle = {
+  color: "#fff",
+  fontWeight: "800",
+  fontSize: "1.1rem",
+};
+
+const brandSubStyle = {
+  color: "#9ca3af",
+  fontSize: "0.88rem",
+  marginTop: "3px",
+};
+
+const brandTextStyle = {
+  color: "#d1d5db",
+  lineHeight: 1.8,
+  fontSize: "0.97rem",
+  marginBottom: "18px",
+};
+
+const contactMiniListStyle = {
+  display: "grid",
+  gap: "10px",
+};
+
+const miniLinkStyle = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: "10px",
+  color: "#fff",
+  textDecoration: "none",
+  fontWeight: "700",
+  fontSize: "0.94rem",
+};
+
+const columnTitleStyle = {
+  color: "#fff",
+  fontSize: "1.1rem",
+  fontWeight: "800",
+  marginBottom: "16px",
+};
+
+const linkColumnStyle = {
+  display: "grid",
+  gap: "10px",
+};
+
+const footerLinkStyle = {
+  color: "#d1d5db",
+  textDecoration: "none",
+  fontSize: "0.95rem",
+  lineHeight: 1.7,
+};
+
+const infoBlockStyle = {
+  display: "grid",
+  gap: "18px",
+};
+
+const infoRowStyle = {
+  display: "flex",
+  alignItems: "flex-start",
+  gap: "12px",
+};
+
+const infoTextStyle = {
+  color: "#e5e7eb",
+  fontSize: "0.95rem",
+  lineHeight: 1.7,
+};
+
+const hourTextStyle = {
+  color: "#d1d5db",
+  fontSize: "0.9rem",
+  lineHeight: 1.55,
+};
+
+const bottomBarStyle = {
+  marginTop: "26px",
+  paddingTop: "22px",
+  borderTop: "1px solid rgba(255,255,255,0.06)",
+  display: "flex",
+  justifyContent: "space-between",
+  gap: "14px",
+  flexWrap: "wrap",
+  alignItems: "center",
+};
+
+const copyrightStyle = {
+  color: "#9ca3af",
+  fontSize: "0.9rem",
+  lineHeight: 1.6,
+  margin: 0,
+};
+
+const bottomLinksStyle = {
+  display: "flex",
+  gap: "14px",
+  flexWrap: "wrap",
+};
+
+const bottomLinkStyle = {
+  color: "#d1d5db",
+  textDecoration: "none",
+  fontSize: "0.92rem",
 };
 
 export default Footer;
