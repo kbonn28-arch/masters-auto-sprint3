@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { MessageSquareText, ArrowRight, Phone, CalendarDays } from "lucide-react";
+import { MessageSquare, ArrowRight, Phone, CalendarDays } from "lucide-react";
 
 export default function QuoteForm() {
   return (
@@ -20,7 +20,6 @@ export default function QuoteForm() {
           }}
           className="quote-grid"
         >
-          {/* Left Info Panel */}
           <motion.div
             initial={{ opacity: 0, x: -22 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -29,7 +28,7 @@ export default function QuoteForm() {
             style={infoCardStyle}
           >
             <div style={eyebrowBadgeStyle}>
-              <MessageSquareText size={16} />
+              <MessageSquare size={16} />
               Request a Quote
             </div>
 
@@ -48,7 +47,7 @@ export default function QuoteForm() {
               </div>
 
               <div style={featureItemStyle}>
-                <MessageSquareText size={18} color="#ef4444" />
+                <MessageSquare size={18} color="#ef4444" />
                 <span>Get a clearer recommendation before committing</span>
               </div>
 
@@ -64,7 +63,6 @@ export default function QuoteForm() {
             </div>
           </motion.div>
 
-          {/* Right CTA Panel */}
           <motion.div
             initial={{ opacity: 0, x: 22 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -73,7 +71,7 @@ export default function QuoteForm() {
             style={ctaCardStyle}
           >
             <div style={ctaIconWrapStyle}>
-              <MessageSquareText size={28} color="#ef4444" />
+              <MessageSquare size={28} color="#ef4444" />
             </div>
 
             <h3 style={ctaTitleStyle}>Start with a quote request</h3>
