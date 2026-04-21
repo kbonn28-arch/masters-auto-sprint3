@@ -156,7 +156,7 @@ export default function Pricing() {
   }, [selectedAddOns]);
 
   const totalEstimate = basePrice + addOnTotal;
-  const depositDue = totalEstimate > 0 ? Math.max(50, Math.round(totalEstimate * 0.3)) : 0;
+  const depositDue = 50;
 
   const handlePackageChange = (packageId) => {
     setSelectedPackage(packageId);
