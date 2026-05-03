@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Star, Clock, CheckCircle, ArrowRight, Users, Calendar, Gift } from 'lucide-react';
 import { track } from '@vercel/analytics/react';
-
+const STRIPE_MEMBERSHIP_PAYMENT_URL = "https://buy.stripe.com/test_14A28sdY36PU7tmc3t4wM00";
 const MaintenanceClub = () => {
   const [selectedPlan, setSelectedPlan] = useState('professional');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -165,7 +165,11 @@ const MaintenanceClub = () => {
           plan: submission.selected_plan
         });
 
-        alert('Thank you! Your Maintenance Club request was submitted. We will contact you soon to confirm your plan and scheduling details.');
+        track('maintenance_club_form_submitted', {
+  plan: submission.selected_plan
+});
+
+window.location.href = `${STRIPE_MEMBERSHIP_PAYMENT_URL}?prefilled_email=${encodeURIComponent(submission.email)}`;
         setSelectedPlan('professional');
         setFormData({
           name: '',
