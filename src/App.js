@@ -19,11 +19,52 @@ import Footer from "./components/Footer";
 import CallButton from "./components/CallButton";
 
 function App() {
-  const [showAdmin, setShowAdmin] = useState(false);
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
 
-  // 👉 ADMIN ROUTE (SAFE — DOES NOT TOUCH MAIN SITE)
+  const handleAdminLogin = () => {
+    const password = prompt("Enter admin password:");
+
+    if (password === "admin123") {
+      setIsAdminAuthenticated(true);
+    } else {
+      alert("Wrong password");
+    }
+  };
+
+  // 👉 ADMIN ROUTE
   if (window.location.pathname === "/admin") {
-    return <AdminPanel onLogout={() => setShowAdmin(false)} />;
+    return isAdminAuthenticated ? (
+      <AdminPanel onLogout={() => setIsAdminAuthenticated(false)} />
+    ) : (
+      <div
+        style={{
+          background: "#000",
+          color: "#fff",
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "20px",
+        }}
+      >
+        <h2>Admin Access Required</h2>
+        <button
+          onClick={handleAdminLogin}
+          style={{
+            padding: "14px 20px",
+            borderRadius: "999px",
+            border: "none",
+            background: "#ff2a2a",
+            color: "#fff",
+            fontWeight: "700",
+            cursor: "pointer",
+          }}
+        >
+          Enter Admin Panel
+        </button>
+      </div>
+    );
   }
 
   return (

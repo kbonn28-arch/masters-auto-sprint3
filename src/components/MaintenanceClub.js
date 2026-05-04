@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Star, Clock, CheckCircle, ArrowRight, Users, Gift } from 'lucide-react';
 import { track } from '@vercel/analytics/react';
@@ -15,14 +15,20 @@ const MaintenanceClub = () => {
     plan: 'professional'
   });
 
-  const [plans, setPlans] = useState(loadMaintenancePlans());
-  React.useEffect(() => {
+ const [plans, setPlans] = useState([]);
+
+useEffect(() => {
+  // Load plans from Supabase
+  loadMaintenancePlans().then(setPlans);
+
+  // Listen for updates
   const handlePlansUpdated = () => {
-    setPlans(loadMaintenancePlans());
+    loadMaintenancePlans().then(setPlans);
   };
 
   window.addEventListener('maintenanceClubPlansUpdated', handlePlansUpdated);
 
+  // Cleanup
   return () => {
     window.removeEventListener('maintenanceClubPlansUpdated', handlePlansUpdated);
   };

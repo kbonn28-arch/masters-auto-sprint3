@@ -1,3 +1,5 @@
+import { supabase } from "../lib/supabaseClient";
+
 export const defaultMaintenancePlans = [
   {
     id: 'basic',
@@ -51,12 +53,35 @@ export const defaultMaintenancePlans = [
   }
 ];
 
-export const loadMaintenancePlans = () => {
-  const saved = localStorage.getItem('maintenanceClubPlans');
-  return saved ? JSON.parse(saved) : defaultMaintenancePlans;
+// 🔥 LOAD from Supabase
+export const loadMaintenancePlans = async () => {
+  const { data, error } = await supabase
+    .from("site_content")
+    .select("content")
+    .eq("id", "maintenance_plans")
+    .single();
+
+  if (error || !data) {
+    console.warn("Using default plans (no DB yet)");
+    return defaultMaintenancePlans;
+  }
+
+  return data.content || defaultMaintenancePlans;
 };
 
-export const saveMaintenancePlans = (plans) => {
-  localStorage.setItem('maintenanceClubPlans', JSON.stringify(plans));
-  window.dispatchEvent(new Event('maintenanceClubPlansUpdated'));
+// 🔥 SAVE to Supabase
+export const saveMaintenancePlans = async (plans) => {
+  const { error } = await supabase
+    .from("site_content")
+    .upsert({
+      id: "maintenance_plans",
+      content: plans,
+    });
+
+  if (error) {
+    console.error("Save failed:", error);
+  } else {
+    alert("Saved to database ✅");
+    window.dispatchEvent(new Event('maintenanceClubPlansUpdated'));
+  }
 };

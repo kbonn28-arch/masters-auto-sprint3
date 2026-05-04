@@ -21,9 +21,12 @@ const AdminPanel = ({ onLogout }) => {
   const [subscriptions, setSubscriptions] = useState([]);
   const [services, setServices] = useState([]);
   const [pricing, setPricing] = useState([]);
-  const [plans, setPlans] = useState(loadMaintenancePlans());
+  const [plans, setPlans] = useState([]);
 
   useEffect(() => {
+loadMaintenancePlans().then((data) => {
+  setPlans(Array.isArray(data) ? data : []);
+});
     setQuotes([
       {
         id: 1,
