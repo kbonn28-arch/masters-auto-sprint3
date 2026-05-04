@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import AdminPanel from "./components/AdminPanel";
 
 // Components
 import Header from "./components/Header";
@@ -18,13 +19,20 @@ import Footer from "./components/Footer";
 import CallButton from "./components/CallButton";
 
 function App() {
+  const [showAdmin, setShowAdmin] = useState(false);
+
+  // 👉 ADMIN ROUTE (SAFE — DOES NOT TOUCH MAIN SITE)
+  if (window.location.pathname === "/admin") {
+    return <AdminPanel onLogout={() => setShowAdmin(false)} />;
+  }
+
   return (
     <div style={{ backgroundColor: "#000", color: "#fff" }}>
       
       {/* HEADER */}
       <Header />
 
-      {/* FLOATING CALL BUTTON (mobile conversion boost) */}
+      {/* FLOATING CALL BUTTON */}
       <div style={{ position: "fixed", bottom: "20px", right: "20px", zIndex: 999 }}>
         <CallButton size="large" />
       </div>
@@ -32,34 +40,34 @@ function App() {
       {/* HERO */}
       <Hero />
 
-      {/* TRUST / ABOUT */}
+      {/* ABOUT */}
       <About />
 
-      {/* CORE SERVICES */}
+      {/* SERVICES */}
       <Services />
 
-      {/* PRICING + BOOKING (MAIN MONEY SECTION) */}
+      {/* PRICING */}
       <Pricing />
 
-      {/* VEHICLE SIZE GUIDE */}
+      {/* SIZING */}
       <SizingGuide />
 
-      {/* CERAMIC UPSELL */}
+      {/* CERAMIC */}
       <CeramicCoating />
 
-      {/* MAINTENANCE CLUB (RECURRING REVENUE) */}
+      {/* MAINTENANCE CLUB */}
       <MaintenanceClub />
 
-      {/* BEFORE / AFTER (TRUST BUILDER) */}
+      {/* GALLERY */}
       <BeforeAfterGallery />
 
       {/* REVIEWS */}
       <Reviews />
 
-      {/* FAQ (REDUCE CALLS) */}
+      {/* FAQ */}
       <FAQ />
 
-      {/* QUOTE ENTRY POINT */}
+      {/* QUOTE */}
       <QuoteForm />
 
       {/* CONTACT */}

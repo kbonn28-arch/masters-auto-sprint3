@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Star, Clock, CheckCircle, ArrowRight, Users, Calendar, Gift } from 'lucide-react';
+import { Shield, Star, Clock, CheckCircle, ArrowRight, Users, Gift } from 'lucide-react';
 import { track } from '@vercel/analytics/react';
+import { loadMaintenancePlans } from '../data/siteContent';
 const STRIPE_MEMBERSHIP_PAYMENT_URL = "https://buy.stripe.com/test_14A28sdY36PU7tmc3t4wM00";
 const MaintenanceClub = () => {
   const [selectedPlan, setSelectedPlan] = useState('professional');
@@ -14,58 +15,19 @@ const MaintenanceClub = () => {
     plan: 'professional'
   });
 
-  const plans = [
-    {
-      id: 'basic',
-      name: 'Basic Care',
-      price: '$39',
-      period: '/month',
-      description: 'Perfect for regular maintenance',
-      features: [
-        'Monthly exterior wash',
-        'Interior vacuum and wipe down',
-        'Tire dressing',
-        'Window cleaning',
-        '10% off additional services'
-      ],
-      popular: false
-    },
-    {
-      id: 'professional',
-      name: 'Professional Care',
-      price: '$79',
-      period: '/month',
-      description: 'Most popular for vehicle enthusiasts',
-      features: [
-        'Bi-weekly exterior wash',
-        'Weekly interior cleaning',
-        'Monthly wax application',
-        'Ceramic coating maintenance',
-        'Priority scheduling',
-        '20% off all services',
-        'Free headlight restoration annually'
-      ],
-      popular: true
-    },
-    {
-      id: 'premium',
-      name: 'Premium Care',
-      price: '$129',
-      period: '/month',
-      description: 'Ultimate protection and care',
-      features: [
-        'Weekly full detail',
-        'Unlimited exterior washes',
-        'Full ceramic coating system',
-        'Paint correction quarterly',
-        'Leather conditioning monthly',
-        'Emergency spill cleanup',
-        '30% off all services',
-        'Free annual ceramic upgrade'
-      ],
-      popular: false
-    }
-  ];
+  const [plans, setPlans] = useState(loadMaintenancePlans());
+  React.useEffect(() => {
+  const handlePlansUpdated = () => {
+    setPlans(loadMaintenancePlans());
+  };
+
+  window.addEventListener('maintenanceClubPlansUpdated', handlePlansUpdated);
+
+  return () => {
+    window.removeEventListener('maintenanceClubPlansUpdated', handlePlansUpdated);
+  };
+}, []);
+        
 
   const benefits = [
     {

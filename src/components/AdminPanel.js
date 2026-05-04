@@ -11,6 +11,7 @@ import {
   LogOut,
   Search,
 } from "lucide-react";
+import { loadMaintenancePlans, saveMaintenancePlans } from "../data/siteContent";
 
 const AdminPanel = ({ onLogout }) => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -20,6 +21,7 @@ const AdminPanel = ({ onLogout }) => {
   const [subscriptions, setSubscriptions] = useState([]);
   const [services, setServices] = useState([]);
   const [pricing, setPricing] = useState([]);
+  const [plans, setPlans] = useState(loadMaintenancePlans());
 
   useEffect(() => {
     setQuotes([
@@ -104,6 +106,7 @@ const AdminPanel = ({ onLogout }) => {
     { id: "subscriptions", label: "Members", icon: Users },
     { id: "pricing", label: "Pricing", icon: DollarSign },
     { id: "services", label: "Services", icon: Settings },
+    { id: "maintenance", label: "Maintenance Club", icon: Settings },
   ];
 
   const filteredQuotes = quotes.filter((quote) =>
@@ -120,9 +123,7 @@ const AdminPanel = ({ onLogout }) => {
 
   const updateQuoteStatus = (id, status) => {
     setQuotes((prev) =>
-      prev.map((quote) =>
-        quote.id === id ? { ...quote, status } : quote
-      )
+      prev.map((quote) => (quote.id === id ? { ...quote, status } : quote))
     );
   };
 
@@ -153,6 +154,46 @@ const AdminPanel = ({ onLogout }) => {
         item.size === size ? { ...item, [field]: Number(value) || 0 } : item
       )
     );
+  };
+
+  const updatePlanField = (index, field, value) => {
+    const updated = [...plans];
+    updated[index] = { ...updated[index], [field]: value };
+    setPlans(updated);
+  };
+
+  const updatePlanFeature = (planIndex, featureIndex, value) => {
+    const updated = [...plans];
+    const updatedFeatures = [...updated[planIndex].features];
+    updatedFeatures[featureIndex] = value;
+    updated[planIndex] = {
+      ...updated[planIndex],
+      features: updatedFeatures,
+    };
+    setPlans(updated);
+  };
+
+  const addPlanFeature = (planIndex) => {
+    const updated = [...plans];
+    updated[planIndex] = {
+      ...updated[planIndex],
+      features: [...updated[planIndex].features, "New Feature"],
+    };
+    setPlans(updated);
+  };
+
+  const removePlanFeature = (planIndex, featureIndex) => {
+    const updated = [...plans];
+    updated[planIndex] = {
+      ...updated[planIndex],
+      features: updated[planIndex].features.filter((_, i) => i !== featureIndex),
+    };
+    setPlans(updated);
+  };
+
+  const handleSavePlans = () => {
+    saveMaintenancePlans(plans);
+    alert("Maintenance Club updates saved.");
   };
 
   const handleSaveChanges = () => {
@@ -186,7 +227,6 @@ const AdminPanel = ({ onLogout }) => {
 
   return (
     <div style={pageStyle}>
-      {/* Top Bar */}
       <div style={topBarStyle}>
         <div style={topBarInnerStyle}>
           <div style={brandWrapStyle}>
@@ -204,8 +244,7 @@ const AdminPanel = ({ onLogout }) => {
         </div>
       </div>
 
-      <div style={layoutStyle}>
-        {/* Sidebar */}
+      <div style={layoutStyle} className="admin-layout-stack">
         <aside style={sidebarStyle}>
           <div style={sidebarCardStyle}>
             {tabs.map((tab) => (
@@ -236,13 +275,15 @@ const AdminPanel = ({ onLogout }) => {
             </div>
           </div>
 
-          <button onClick={handleSaveChanges} style={saveAllButtonStyle}>
+          <button
+            onClick={activeTab === "maintenance" ? handleSavePlans : handleSaveChanges}
+            style={saveAllButtonStyle}
+          >
             <Save size={18} />
             Save Changes
           </button>
         </aside>
 
-        {/* Main Content */}
         <main style={mainStyle}>
           {activeTab === "dashboard" && (
             <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}>
@@ -251,12 +292,7 @@ const AdminPanel = ({ onLogout }) => {
               <div style={statsGridStyle}>
                 {stats.map((stat) => (
                   <div key={stat.label} style={statCardStyle}>
-                    <div
-                      style={{
-                        ...statDotStyle,
-                        background: stat.color,
-                      }}
-                    />
+                    <div style={{ ...statDotStyle, background: stat.color }} />
                     <div style={statValueStyle}>{stat.value}</div>
                     <div style={statLabelStyle}>{stat.label}</div>
                   </div>
@@ -311,7 +347,6 @@ const AdminPanel = ({ onLogout }) => {
                           {quote.packageName} • {quote.vehicle}
                         </p>
                       </div>
-
                       <div style={statusBadge(quote.status)}>{quote.status}</div>
                     </div>
 
@@ -353,10 +388,7 @@ const AdminPanel = ({ onLogout }) => {
                       >
                         Mark Closed
                       </button>
-                      <button
-                        onClick={() => deleteQuote(quote.id)}
-                        style={dangerButtonStyle}
-                      >
+                      <button onClick={() => deleteQuote(quote.id)} style={dangerButtonStyle}>
                         <Trash2 size={16} />
                         Delete
                       </button>
@@ -385,7 +417,6 @@ const AdminPanel = ({ onLogout }) => {
                           {sub.plan} • {sub.vehicleInfo}
                         </p>
                       </div>
-
                       <div style={statusBadge(sub.status)}>{sub.status}</div>
                     </div>
 
@@ -516,6 +547,78 @@ const AdminPanel = ({ onLogout }) => {
               </div>
             </motion.div>
           )}
+
+          {activeTab === "maintenance" && (
+            <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}>
+              <h2 style={sectionTitleStyle}>Maintenance Club Editor</h2>
+
+              <div style={stackStyle}>
+                {plans.map((plan, index) => (
+                  <div key={plan.id} style={panelStyle}>
+                    <div style={fieldGroupStyle}>
+                      <label style={fieldLabelStyle}>Plan Name</label>
+                      <input
+                        value={plan.name}
+                        onChange={(e) => updatePlanField(index, "name", e.target.value)}
+                        style={fieldInputStyle}
+                      />
+                    </div>
+
+                    <div style={fieldGroupStyle}>
+                      <label style={fieldLabelStyle}>Price</label>
+                      <input
+                        value={plan.price}
+                        onChange={(e) => updatePlanField(index, "price", e.target.value)}
+                        style={fieldInputStyle}
+                      />
+                    </div>
+
+                    <div style={fieldGroupStyle}>
+                      <label style={fieldLabelStyle}>Description</label>
+                      <textarea
+                        value={plan.description}
+                        onChange={(e) =>
+                          updatePlanField(index, "description", e.target.value)
+                        }
+                        style={fieldTextareaStyle}
+                      />
+                    </div>
+
+                    <div style={fieldGroupStyle}>
+                      <label style={fieldLabelStyle}>Features</label>
+
+                      {plan.features.map((feature, fIndex) => (
+                        <div key={fIndex} style={featureRowStyle}>
+                          <input
+                            value={feature}
+                            onChange={(e) =>
+                              updatePlanFeature(index, fIndex, e.target.value)
+                            }
+                            style={fieldInputStyle}
+                          />
+                          <button
+                            onClick={() => removePlanFeature(index, fIndex)}
+                            style={dangerButtonStyle}
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+
+                      <button onClick={() => addPlanFeature(index)} style={secondaryActionStyle}>
+                        Add Feature
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <button onClick={handleSavePlans} style={saveAllButtonStyle}>
+                <Save size={18} />
+                Save Maintenance Club Changes
+              </button>
+            </motion.div>
+          )}
         </main>
       </div>
 
@@ -530,7 +633,6 @@ const AdminPanel = ({ onLogout }) => {
   );
 };
 
-/* Styles */
 const pageStyle = {
   minHeight: "100vh",
   background: "linear-gradient(180deg, #030303 0%, #000000 100%)",
@@ -935,6 +1037,13 @@ const fieldTextareaStyle = {
   fontSize: "0.96rem",
   resize: "vertical",
   lineHeight: 1.7,
+};
+
+const featureRowStyle = {
+  display: "grid",
+  gridTemplateColumns: "1fr auto",
+  gap: "10px",
+  alignItems: "center",
 };
 
 const statusBadge = (status) => ({
