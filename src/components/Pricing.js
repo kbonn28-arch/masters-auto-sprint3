@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/meepbqgd";
 const STRIPE_CHECKOUT_URL = "https://buy.stripe.com/test_14A28sdY36PU7tmc3t4wM00";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5002";
 
 const packageData = {
   basic: {
@@ -10,7 +11,7 @@ const packageData = {
       "A straightforward inside-and-out refresh with hand wash, wax, interior wipe down, windows, and vacuuming.",
     duration: "2–3 hours",
     prices: {
-      xsmall: 159,
+      xsmall: 150,
       small: 195,
       medium: 249,
       large: 339,
@@ -120,6 +121,15 @@ const addOns = [
   },
 ];
 
+const formatVehicleKey = (vehicleSize) => {
+  const key = vehicleSize.toLowerCase().trim();
+
+  if (key === "extra small") return "xsmall";
+  if (key === "extra large") return "xlarge";
+
+  return key;
+};
+
 export default function Pricing() {
   const [selectedPackage, setSelectedPackage] = useState("basic");
   const [selectedVehicle, setSelectedVehicle] = useState("medium");
@@ -128,6 +138,8 @@ export default function Pricing() {
     spot: false,
     shampoo: false,
   });
+
+  const [pricingData, setPricingData] = useState({});
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -140,8 +152,50 @@ export default function Pricing() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/api/pricing`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Could not load pricing from backend.");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (!Array.isArray(data)) return;
+
+        const formatted = {};
+
+        data.forEach((item) => {
+          const key = formatVehicleKey(item.vehicle_size);
+
+          formatted[key] = {
+            basic: item.basic_price,
+            full: item.full_price,
+          };
+        });
+
+        setPricingData(formatted);
+      })
+      .catch((err) => {
+        console.error("Pricing load error:", err);
+      });
+  }, []);
+
   const activePackage = packageData[selectedPackage];
-  const basePrice = activePackage.prices[selectedVehicle] || 0;
+
+  const getVehiclePrice = (packageId, vehicleId) => {
+    if (packageId === "basic") {
+      return pricingData[vehicleId]?.basic ?? packageData.basic.prices[vehicleId] ?? 0;
+    }
+
+    if (packageId === "full") {
+      return pricingData[vehicleId]?.full ?? packageData.full.prices[vehicleId] ?? 0;
+    }
+
+    return packageData[packageId]?.prices[vehicleId] ?? 0;
+  };
+
+  const basePrice = getVehiclePrice(selectedPackage, selectedVehicle);
 
   const addOnTotal = useMemo(() => {
     return addOns.reduce((total, addon) => {
@@ -215,6 +269,8 @@ export default function Pricing() {
     setLoading(true);
 
     try {
+      const selectedVehicleInfo = vehicleOptions.find((v) => v.id === selectedVehicle);
+
       const payload = {
         customerName: formData.fullName,
         email: formData.email,
@@ -223,9 +279,8 @@ export default function Pricing() {
         notes: formData.notes || "No additional notes",
         packageName: activePackage.name,
         packageDuration: activePackage.duration,
-        vehicleSize: vehicleOptions.find((v) => v.id === selectedVehicle)?.label || selectedVehicle,
-        vehicleTypeDescription:
-          vehicleOptions.find((v) => v.id === selectedVehicle)?.example || "",
+        vehicleSize: selectedVehicleInfo?.label || selectedVehicle,
+        vehicleTypeDescription: selectedVehicleInfo?.example || "",
         addOns:
           selectedPackage === "full"
             ? selectedAddOnNames.join(", ") || "None selected"
@@ -271,7 +326,6 @@ export default function Pricing() {
       }}
     >
       <div style={{ maxWidth: "1240px", margin: "0 auto" }}>
-        {/* Top Heading */}
         <div
           style={{
             maxWidth: "860px",
@@ -289,7 +343,6 @@ export default function Pricing() {
           </p>
         </div>
 
-        {/* Package Selection */}
         <div style={packageGridStyle}>
           {Object.entries(packageData).map(([key, pkg]) => {
             const isActive = selectedPackage === key;
@@ -313,13 +366,13 @@ export default function Pricing() {
         </div>
 
         <div style={mainGridStyle}>
-          {/* Left Column */}
           <div style={panelStyle}>
             <h3 style={panelTitleStyle}>1. Select your vehicle size</h3>
 
             <div style={vehicleGridStyle}>
               {vehicleOptions.map((vehicle) => {
                 const active = selectedVehicle === vehicle.id;
+                const vehiclePrice = getVehiclePrice(selectedPackage, vehicle.id);
 
                 return (
                   <button
@@ -333,9 +386,7 @@ export default function Pricing() {
                   >
                     <div style={vehicleLabelStyle}>{vehicle.label}</div>
                     <div style={vehicleExampleStyle}>{vehicle.example}</div>
-                    <div style={vehiclePriceStyle}>
-                      Starting at ${activePackage.prices[vehicle.id]}
-                    </div>
+                    <div style={vehiclePriceStyle}>Starting at ${vehiclePrice}</div>
                   </button>
                 );
               })}
@@ -389,7 +440,6 @@ export default function Pricing() {
             </div>
           </div>
 
-          {/* Right Column */}
           <div style={panelStyle}>
             <h3 style={panelTitleStyle}>4. Booking details</h3>
 
@@ -450,9 +500,7 @@ export default function Pricing() {
 
                 <div style={summaryRowStyle}>
                   <span>Vehicle Size</span>
-                  <span>
-                    {vehicleOptions.find((v) => v.id === selectedVehicle)?.label}
-                  </span>
+                  <span>{vehicleOptions.find((v) => v.id === selectedVehicle)?.label}</span>
                 </div>
 
                 <div style={summaryRowStyle}>
@@ -505,7 +553,6 @@ export default function Pricing() {
   );
 }
 
-/* Styles */
 const eyebrowStyle = {
   color: "#ff4d4d",
   textTransform: "uppercase",

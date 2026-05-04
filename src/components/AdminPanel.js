@@ -13,20 +13,32 @@ import {
 } from "lucide-react";
 import { loadMaintenancePlans, saveMaintenancePlans } from "../data/siteContent";
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5002";
+
+const fallbackPricing = [
+  { size: "Extra Small", basic: 150, full: 359 },
+  { size: "Small", basic: 195, full: 395 },
+  { size: "Medium", basic: 249, full: 449 },
+  { size: "Large", basic: 339, full: 539 },
+  { size: "Extra Large", basic: 429, full: 629 },
+];
+
 const AdminPanel = ({ onLogout }) => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [searchTerm, setSearchTerm] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   const [quotes, setQuotes] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
   const [services, setServices] = useState([]);
-  const [pricing, setPricing] = useState([]);
+  const [pricing, setPricing] = useState(fallbackPricing);
   const [plans, setPlans] = useState([]);
 
   useEffect(() => {
-loadMaintenancePlans().then((data) => {
-  setPlans(Array.isArray(data) ? data : []);
-});
+    loadMaintenancePlans().then((data) => {
+      setPlans(Array.isArray(data) ? data : []);
+    });
+
     setQuotes([
       {
         id: 1,
@@ -94,13 +106,28 @@ loadMaintenancePlans().then((data) => {
       },
     ]);
 
-    setPricing([
-      { size: "Extra Small", basic: 159, full: 359 },
-      { size: "Small", basic: 195, full: 395 },
-      { size: "Medium", basic: 249, full: 449 },
-      { size: "Large", basic: 339, full: 539 },
-      { size: "Extra Large", basic: 429, full: 629 },
-    ]);
+    fetch(`${API_BASE_URL}/api/pricing`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to load pricing from backend.");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (!Array.isArray(data)) return;
+
+        const formattedPricing = data.map((item) => ({
+          size: item.vehicle_size,
+          basic: item.basic_price,
+          full: item.full_price,
+        }));
+
+        setPricing(formattedPricing);
+      })
+      .catch((err) => {
+        console.error("Pricing load error:", err);
+        setPricing(fallbackPricing);
+      });
   }, []);
 
   const tabs = [
@@ -133,7 +160,6 @@ loadMaintenancePlans().then((data) => {
   const deleteQuote = (id) => {
     const confirmed = window.confirm("Delete this quote request?");
     if (!confirmed) return;
-
     setQuotes((prev) => prev.filter((quote) => quote.id !== id));
   };
 
@@ -199,10 +225,36 @@ loadMaintenancePlans().then((data) => {
     alert("Maintenance Club updates saved.");
   };
 
-  const handleSaveChanges = () => {
-    alert(
-      "Demo admin panel only: your changes are updated in the page state right now. Next step would be connecting this to your backend or CMS."
-    );
+  const handleSaveChanges = async () => {
+    if (activeTab !== "pricing") {
+      alert("Only the Pricing tab is connected to the backend right now.");
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+
+      const response = await fetch(`${API_BASE_URL}/api/pricing`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(pricing),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || "Pricing could not be saved.");
+      }
+
+      alert("Pricing saved successfully.");
+    } catch (err) {
+      console.error("Pricing save error:", err);
+      alert("Pricing could not be saved. Make sure the backend is running on port 5002.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const stats = [
@@ -281,9 +333,10 @@ loadMaintenancePlans().then((data) => {
           <button
             onClick={activeTab === "maintenance" ? handleSavePlans : handleSaveChanges}
             style={saveAllButtonStyle}
+            disabled={isSaving}
           >
             <Save size={18} />
-            Save Changes
+            {isSaving ? "Saving..." : "Save Changes"}
           </button>
         </aside>
 
@@ -470,8 +523,8 @@ loadMaintenancePlans().then((data) => {
 
               <div style={panelStyle}>
                 <p style={mutedTextStyle}>
-                  Update visible starting prices by vehicle size. This is the owner-facing
-                  control area for pricing edits.
+                  Update visible starting prices by vehicle size. These pricing edits are
+                  connected to the backend and saved in Supabase.
                 </p>
 
                 <div style={pricingTableWrapStyle}>
